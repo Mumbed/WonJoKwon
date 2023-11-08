@@ -10,5 +10,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         print("sibal");
         print("commit test sangmin")
+        print("commit test myeongjin")
     }
 }
