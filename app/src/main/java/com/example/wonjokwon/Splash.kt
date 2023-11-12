@@ -30,6 +30,13 @@ class Splash : AppCompatActivity() {
             },3000)
 
         }
+        else{
+            Handler().postDelayed({
+            startActivity(Intent(this, MainActivity::class.java))
+
+            },3000)
+
+        }
 
 
     }
