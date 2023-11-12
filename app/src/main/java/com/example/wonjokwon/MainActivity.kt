@@ -10,4 +10,5 @@ class MainActivity : AppCompatActivity() {
         print("sibal");
         print("commit test sangmin branch checout2")
     }
+
 }
