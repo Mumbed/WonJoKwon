@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "741732339699",
+    "project_id": "wonjokwon",
+    "storage_bucket": "wonjokwon.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:741732339699:android:aeb81e838b79da25524c86",
+        "android_client_info": {
+          "package_name": "com.example.wonjokwon"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCme8odovmuGx0XKSMZcdGp4oEFROvBm6A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
