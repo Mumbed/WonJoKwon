@@ -14,6 +14,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         print("sibal");
         print("commit test sangmin branch checout2")
+        print("girignore에 json추가함")
 
 
 
