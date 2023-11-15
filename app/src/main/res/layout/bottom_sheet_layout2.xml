@@ -8,18 +8,18 @@
 
     <!-- BottomSheetDialog에 표시할 내용 추가 -->
     <Button
-        android:id="@+id/newItemUpdate"
+        android:id="@+id/ItemFix"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="새로운 상품 등록" />
-
-
+        android:text="상품 수정" />
 
     <Button
-        android:id="@+id/settings"
+        android:id="@+id/chattingToSeller"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="설정" />
+        android:text="판매자 에게 채팅" />
+
+
 
     <!-- 추가적인 메뉴나 내용을 원하는만큼 추가 -->
 

@@ -7,34 +7,29 @@ import android.widget.CheckBox
 import android.widget.EditText
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
 class NewItemsUpdate : AppCompatActivity() {
+    private lateinit var auth: FirebaseAuth
 
     private var adapter: RvAdapter? = null
     private val db: FirebaseFirestore = Firebase.firestore
     private val itemsCollectionRef = db.collection("items")
-    private var snapshotListener: ListenerRegistration? = null
-
-    private val checkAutoID by lazy { findViewById<CheckBox>(R.id.checkAutoID) }
-    private val editID by lazy { findViewById<EditText>(R.id.editID) }
     private val editPrice by lazy {findViewById<EditText>(R.id.editPrice)}
     private val editItemName by lazy {findViewById<EditText>(R.id.editItemName)}
+    private val ItemStory by lazy {findViewById<EditText>(R.id.Updatestory)}
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_new_items_update)
 
-
-        checkAutoID.setOnClickListener {
-            editID.isEnabled = !checkAutoID.isChecked
-            if (!editID.isEnabled)
-                editID.setText("")
-        }
 
         findViewById<Button>(R.id.buttonAddUpdate)?.setOnClickListener {
             addItem()
@@ -53,28 +48,45 @@ class NewItemsUpdate : AppCompatActivity() {
         }
     }
     private fun addItem() {
+        auth = Firebase.auth
+
+        val userEmail = auth.currentUser!!.getEmail().toString().substringBefore('@')
+
+        val uid=userEmail
         val name = editItemName.text.toString()
+        val story=ItemStory.text.toString()
+        val price = editPrice.text.toString().toInt()
+        val status="true"
         if (name.isEmpty()) {
             Snackbar.make(editItemName, "Input name!", Snackbar.LENGTH_SHORT).show()
             return
         }
-        val price = editPrice.text.toString().toInt()
-        val autoID = checkAutoID.isChecked
-        val itemID = editID.text.toString()
-        if (!autoID and itemID.isEmpty()) {
-            Snackbar.make(editID, "Input ID or check Auto-generate ID!", Snackbar.LENGTH_SHORT).show()
+        if (story.isEmpty()) {
+            Snackbar.make(editItemName, "Input story!", Snackbar.LENGTH_SHORT).show()
             return
         }
+
+
+//        val autoID = checkAutoID.isChecked
+//        val itemID = editID.text.toString()
+//        if (!autoID and itemID.isEmpty()) {
+//            Snackbar.make(editID, "Input ID or check Auto-generate ID!", Snackbar.LENGTH_SHORT).show()
+//            return
+//        }
         val itemMap = hashMapOf(
+            "uid" to uid,
             "name" to name,
-            "price" to price
+            "story" to story,
+            "price" to price,
+            "status" to status
+
         )
-        if (autoID) {
-            itemsCollectionRef.add(itemMap)
+//        if (autoID) {
+//            itemsCollectionRef.add(itemMap)
+//                .addOnSuccessListener { updateList() }.addOnFailureListener {  }
+//        } else {
+            itemsCollectionRef.document().set(itemMap)
                 .addOnSuccessListener { updateList() }.addOnFailureListener {  }
-        } else {
-            itemsCollectionRef.document(itemID).set(itemMap)
-                .addOnSuccessListener { updateList() }.addOnFailureListener {  }
-        }
+
     }
 }

@@ -11,18 +11,18 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.QueryDocumentSnapshot
 
 
-data class Item(val id: String, val name: String, val price: Int) {
+data class Item(val id: String, val name: String,val story:String ,val status:String,val price: Int) {
     constructor(doc: QueryDocumentSnapshot) :
-            this(doc.id, doc["name"].toString(), doc["price"].toString().toIntOrNull() ?: 0)
+            this(doc.id, doc["name"].toString(), doc["story"].toString(),doc["status"].toString(),doc["price"].toString().toIntOrNull() ?: 0)
     constructor(key: String, map: Map<*, *>) :
-            this(key, map["name"].toString(), map["price"].toString().toIntOrNull() ?: 0)
+            this(key, map["name"].toString(), map["story"].toString(),map["status"].toString(), map["price"].toString().toIntOrNull() ?: 0)
 }
 class MyViewHolder(val view: View) : RecyclerView.ViewHolder(view)
 
 class RvAdapter(val context: Context, private var items: List<Item>):
     RecyclerView.Adapter<MyViewHolder> () {
     fun interface OnItemClickListener {
-        fun onItemClick(student_id: String)
+        fun onItemClick(position: String)
     }
     private var itemClickListener: OnItemClickListener? = null
 
@@ -51,7 +51,7 @@ class RvAdapter(val context: Context, private var items: List<Item>):
         }*/
         holder.view.findViewById<TextView>(R.id.rvTextArea).setOnClickListener {
             //AlertDialog.Builder(context).setMessage("You clicked ${student.name}.").show()
-            itemClickListener?.onItemClick(item.id)
+            itemClickListener?.onItemClick(item.id)//키값으로 들어갈 아이디
         }
     }
 

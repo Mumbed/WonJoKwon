@@ -3,6 +3,7 @@ package com.example.wonjokwon
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
@@ -20,8 +21,6 @@ class MainActivity : AppCompatActivity(){
     private var adapter: RvAdapter? = null
     private val db: FirebaseFirestore = Firebase.firestore
     private val itemsCollectionRef = db.collection("items")
-    private var snapshotListener: ListenerRegistration? = null
-
     private val recyclerViewItems by lazy { findViewById<RecyclerView>(R.id.itemsRecyclerView) }
 
 
@@ -36,9 +35,15 @@ class MainActivity : AppCompatActivity(){
 
         updateList()  // list items on recyclerview
         adapter?.setOnItemClickListener {
+            val fragment = ItemView()
+            val transaction = supportFragmentManager.beginTransaction()
+            val bundle = Bundle()
+            bundle.putString("key", it)
+            fragment.arguments = bundle
 
-
-
+            transaction.replace(R.id.fragment_container, fragment)
+            transaction.addToBackStack(null)
+            transaction.commit()
 
         }
 
@@ -52,7 +57,6 @@ class MainActivity : AppCompatActivity(){
             // BottomSheetDialog에 표시할 내용을 설정
             // 여기에 여러 메뉴나 내용을 추가하면 됩니다.
             val btnMenuItem1 = view.findViewById<Button>(R.id.newItemUpdate)
-            val btnMenuItem2 = view.findViewById<Button>(R.id.chat)
             val btnMenuItem3 = view.findViewById<Button>(R.id.settings)
 
             bottomSheetDialog.setContentView(view)
@@ -63,10 +67,6 @@ class MainActivity : AppCompatActivity(){
                 startActivity(intent)
 
             }
-
-            btnMenuItem2.setOnClickListener {
-
-            }
             btnMenuItem3.setOnClickListener {
                 val intent= Intent(this, SettingsActivity::class.java)
                 startActivity(intent)
@@ -75,7 +75,21 @@ class MainActivity : AppCompatActivity(){
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        updateList()
+    }
 
+    override fun onBackPressed() {
+        super.onBackPressed()
+        updateList()
+
+    }
+
+    override fun onStop() {
+        super.onStop()
+        updateList()
+    }
     private fun updateList() {
         itemsCollectionRef.get().addOnSuccessListener {
             val items = mutableListOf<Item>()
