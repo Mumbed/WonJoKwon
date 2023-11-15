@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ItemView"
+    android:id="@+id/Itemsub"
+    android:alpha="1.0"
+    android:background="#FFFFFF">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
+
+        <ImageView
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_gravity="center"
+
+            />
+    <TextView
+        android:id="@+id/ItemTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:textSize="30dp"
+        android:textStyle="bold"
+        android:text="title" />
+        <TextView
+            android:id="@+id/ItemPrice"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginTop="20dp"
+            android:textSize="30dp"
+            android:textStyle="bold"
+            android:text="price" />
+        <TextView
+            android:layout_margin="20dp"
+            android:id="@+id/sellerid"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:textSize="20dp"
+            android:textStyle="italic"
+            android:layout_gravity="center"
+            android:text="seller" />
+        <TextView
+            android:layout_margin="20dp"
+            android:id="@+id/status"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:textSize="20dp"
+            android:textStyle="italic"
+            android:layout_gravity="center"
+            android:text="판매중" />
+
+        <TextView
+            android:id="@+id/ItemStory"
+            android:layout_marginTop="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="상품내용 ...."
+            />
+
+
+    </LinearLayout>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/floatingActionButton2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:clickable="true"
+        android:layout_margin="20dp"
+        tools:src="@tools:sample/avatars" />
+
+
+</FrameLayout>
