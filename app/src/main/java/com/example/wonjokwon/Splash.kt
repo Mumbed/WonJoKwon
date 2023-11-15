@@ -31,8 +31,11 @@ class Splash : AppCompatActivity() {
 
         }
         else{
+            val name=auth.currentUser!!.email.toString()
+            name.substringAfter("@")
             Handler().postDelayed({
             startActivity(Intent(this, MainActivity::class.java))
+                Toast.makeText(this, "안녕하세요$name", Toast.LENGTH_SHORT).show()
 
             },3000)
 
@@ -41,3 +44,4 @@ class Splash : AppCompatActivity() {
 
     }
 }
+

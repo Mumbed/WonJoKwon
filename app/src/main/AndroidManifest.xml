@@ -13,6 +13,12 @@
         android:theme="@style/Theme.WonJoKwon"
         tools:targetApi="31">
         <activity
+            android:name=".NewItemsUpdate"
+            android:exported="false" />
+        <activity
+            android:name=".SettingsActivity"
+            android:exported="false" />
+        <activity
             android:name=".LoginAcivity"
             android:exported="false" />
         <activity
@@ -29,7 +35,7 @@
             android:exported="false" />
         <activity
             android:name=".MainActivity"
-            android:exported="true"></activity>
+            android:exported="true" />
     </application>
 
 </manifest>

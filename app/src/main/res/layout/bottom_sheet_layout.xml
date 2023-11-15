@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <!-- BottomSheetDialog에 표시할 내용 추가 -->
+    <Button
+        android:id="@+id/newItemUpdate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="새로운 상품 등록" />
+
+    <Button
+        android:id="@+id/chat"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="채팅" />
+
+    <Button
+        android:id="@+id/settings"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="설정" />
+
+    <!-- 추가적인 메뉴나 내용을 원하는만큼 추가 -->
+
+</LinearLayout>
