@@ -56,7 +56,7 @@ class NewItemsUpdate : AppCompatActivity() {
         val name = editItemName.text.toString()
         val story=ItemStory.text.toString()
         val price = editPrice.text.toString().toInt()
-        val status="true"
+        val status="selled"
         if (name.isEmpty()) {
             Snackbar.make(editItemName, "Input name!", Snackbar.LENGTH_SHORT).show()
             return
@@ -67,12 +67,6 @@ class NewItemsUpdate : AppCompatActivity() {
         }
 
 
-//        val autoID = checkAutoID.isChecked
-//        val itemID = editID.text.toString()
-//        if (!autoID and itemID.isEmpty()) {
-//            Snackbar.make(editID, "Input ID or check Auto-generate ID!", Snackbar.LENGTH_SHORT).show()
-//            return
-//        }
         val itemMap = hashMapOf(
             "uid" to uid,
             "name" to name,
@@ -81,10 +75,6 @@ class NewItemsUpdate : AppCompatActivity() {
             "status" to status
 
         )
-//        if (autoID) {
-//            itemsCollectionRef.add(itemMap)
-//                .addOnSuccessListener { updateList() }.addOnFailureListener {  }
-//        } else {
         itemsCollectionRef.document().set(itemMap)
             .addOnSuccessListener { updateList() }.addOnFailureListener {  }
 

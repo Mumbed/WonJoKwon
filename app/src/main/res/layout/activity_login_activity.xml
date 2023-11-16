@@ -11,18 +11,18 @@
 
     <EditText
         android:id="@+id/emailArea"
+        android:hint="email"
         android:layout_width="match_parent"
         android:layout_marginTop="20dp"
         android:layout_marginBottom="8dp"
         android:padding="12dp"
         android:background="#FFFFFF"
         android:textColorHint="#9E9E9E"
-        android:hint="email"
         android:layout_height="50dp"
         />
 
     <EditText
-
+        android:password="true"
         android:id="@+id/passwordArea"
         android:layout_width="match_parent"
         android:layout_marginTop="20dp"

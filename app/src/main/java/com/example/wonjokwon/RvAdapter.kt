@@ -43,6 +43,7 @@ class RvAdapter(val context: Context, private var items: List<Item>):
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val item = items[position]
 
+
         //holder.view.findViewById<ImageView>(R.id.rvimageArea). = item.id
         holder.view.findViewById<TextView>(R.id.rvTextArea).text = item.name
         /* holder.view.findViewById<TextView>(R.id.textID).setOnClickListener {

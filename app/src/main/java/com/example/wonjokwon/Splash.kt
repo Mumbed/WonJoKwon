@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -17,8 +18,7 @@ class Splash : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
         auth = Firebase.auth
-
-
+        loadSplashScreen()
 
         if(auth.currentUser?.uid==null){
             Handler().postDelayed({
@@ -38,9 +38,14 @@ class Splash : AppCompatActivity() {
                 Toast.makeText(this, "안녕하세요$name", Toast.LENGTH_SHORT).show()
 
             },3000)
-
         }
-
-
+    }
+    private fun loadSplashScreen() {
+        Handler(Looper.getMainLooper()).postDelayed({
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+            finish()
+        }, 3000)
     }
 }
+

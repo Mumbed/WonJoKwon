@@ -1,38 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="50dp">
+    tools:context=".SettingsFragment"
+    android:alpha="1.0"
+    android:background="#FFFFFF">
 
-    <!-- BottomSheetDialog에 표시할 내용 추가 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="50dp"
+        >
     <Button
-        android:text="새로운 상품 등록"
-        android:id="@+id/newItemUpdate"
         android:layout_margin="20dp"
+        android:id="@+id/Logout"
+        android:text="logout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:padding="16dp"
         android:textColor="#FFFFFF"
         android:background="#2196F3"
-         />
-
-
+       />
 
     <Button
-        android:text="설정"
-        android:id="@+id/settings"
         android:layout_margin="20dp"
+        android:id="@+id/join"
+        android:text="join"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:padding="16dp"
         android:textColor="#FFFFFF"
         android:background="#2196F3"
-        />
+       />
 
-    <!-- 추가적인 메뉴나 내용을 원하는만큼 추가 -->
 
-</LinearLayout>
+    </LinearLayout>
+
+</FrameLayout>
