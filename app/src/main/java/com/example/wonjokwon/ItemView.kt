@@ -79,13 +79,17 @@ class ItemView : Fragment() {
 
 
         itemsCollectionRef.document(data.toString()).get().addOnSuccessListener {
-//            editID.setText(it.id)
-//            checkAutoID.isChecked = false
-//            editID.isEnabled = true
+
             title.setText("상품명 : "+it["name"].toString())
             price.setText("가격 : "+it["price"].toString())
             story.setText("상품설명 : "+it["story"].toString())
-            status.setText(it["status"].toString())
+
+            if(it["status"].toString().equals("selled")){
+                status.setText("판매완료")
+            }
+            else {
+                status.setText("판매중")
+            }
             uid=it["uid"].toString()
             sellerid.setText(it["uid"].toString()+" 님의 판매글")
         }.addOnFailureListener {
@@ -132,8 +136,11 @@ class ItemView : Fragment() {
 
                     buttonSave.setOnClickListener {
 
-                        if(status.isChecked){
-                            itemsCollectionRef.document(data.toString()).update("status", "판매완료")
+                        if(status.isChecked){//판매완료
+                            itemsCollectionRef.document(data.toString()).update("status", "selled")
+                                .addOnSuccessListener { updateList() }
+                        }else{
+                            itemsCollectionRef.document(data.toString()).update("status", "unselled")
                                 .addOnSuccessListener { updateList() }
                         }
 
