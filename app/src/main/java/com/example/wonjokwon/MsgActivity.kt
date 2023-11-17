@@ -19,8 +19,7 @@ class MsgActivity : AppCompatActivity() {
     private var adapter: MsgRvAdapter? = null
     private lateinit var auth: FirebaseAuth
     val recyclerViewItems by lazy { findViewById<RecyclerView>(R.id.msgItemsRecyclerView) }
-    val msgsendtext by lazy{findViewById<EditText>(R.id.msgEditTextMessage)}
-    val msgsendButton by lazy { findViewById<Button>(R.id.msgButtonSendMessage) }
+
     private val db: FirebaseFirestore = Firebase.firestore
 
     private val msgitemsCollectionRef = db.collection("msg")
@@ -32,25 +31,11 @@ class MsgActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_msg)
 
-        val getData=intent.getStringExtra("Receiver")
-        val receiverName=getData?.substringBefore(",")
-        val itemName=getData?.substringAfter(",")
         updateList()
         recyclerViewItems.layoutManager = LinearLayoutManager(this)
         adapter = MsgRvAdapter(this, emptyList())
         recyclerViewItems.adapter = adapter
-
-
-
-        msgsendButton.setOnClickListener {
-            if (receiverName != null) {
-                if (itemName != null) {
-                    addItem(receiverName,itemName)
-                }
-            }
-        }
-
-
+        updateList()
 
     }
 
@@ -59,12 +44,14 @@ class MsgActivity : AppCompatActivity() {
 
         val userEmail = auth.currentUser!!.getEmail().toString().substringBefore('@')
         msgitemsCollectionRef.get().addOnSuccessListener {
+
             val items = mutableListOf<MsgItem>()
             for (doc in it) {
                 msgitemsCollectionRef.document(doc.id).get()
                     .addOnSuccessListener {
                         if(userEmail==(it["receiverName"].toString())){
                             items.add(MsgItem(doc))
+                            adapter?.msgUpdateList(items)
                         }
                     }
 
@@ -73,32 +60,20 @@ class MsgActivity : AppCompatActivity() {
         }
     }
 
-    private fun addItem(receiverName:String,itemName:String) {
-        auth = Firebase.auth
+    override fun onResume() {
+        super.onResume()
+        updateList()
+    }
 
-        val userEmail = auth.currentUser!!.getEmail().toString().substringBefore('@')
-
-        val senderName=userEmail
-        val receiverName=receiverName
-        val itemName=itemName
-        val msg=msgsendtext.text.toString()
-
-        if (msg.isEmpty()) {
-            Snackbar.make(msgsendtext, "Input text!", Snackbar.LENGTH_SHORT).show()
-            return
-        }
-
-
-        val itemMap = hashMapOf(
-            "name" to senderName,
-            "receiverName" to receiverName,
-            "itemName" to itemName,
-            "msg" to msg
-        )
-        msgitemsCollectionRef.document().set(itemMap)
-            .addOnSuccessListener { updateList() }.addOnFailureListener {  }
+    override fun onBackPressed() {
+        super.onBackPressed()
+        updateList()
 
     }
 
+    override fun onStop() {
+        super.onStop()
+        updateList()
+    }
 
 }

@@ -34,12 +34,9 @@ class ItemView : Fragment() {
     private lateinit var auth: FirebaseAuth
     private var uid=""
     private var adapter: RvAdapter? = null
+    private val msgitemsCollectionRef = db.collection("msg")
 
-    val title=view?.findViewById<TextView>(R.id.ItemTitle)
-    val price=view?.findViewById<TextView>(R.id.ItemPrice)
-    val story=view?.findViewById<TextView>(R.id.ItemStory)
-    val sellerid=view?.findViewById<TextView>(R.id.sellerid)
-    val status=view?.findViewById<TextView>(R.id.status)
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -206,12 +203,22 @@ class ItemView : Fragment() {
             }
 
             btnMenuItem2.setOnClickListener {//메세지 전송 로직
-                val intent= Intent(requireActivity(), MsgActivity::class.java)
+                val builder2 = AlertDialog.Builder(context)
+                val inflater2 = layoutInflater.inflate(R.layout.msgdialog, null)
+                builder2.setView(inflater2)
+
+                val msg=inflater2.findViewById<EditText>(R.id.msgText)
+                val sendBtn=inflater2.findViewById<Button>(R.id.buttonSend)
                 val titlename=title.text.toString().substringAfter(": ")
-                intent.putExtra("Receiver",uid+","+titlename)
+                inflater2.findViewById<TextView>(R.id.msgDialogTitle).setText(uid+"님에게 메세지 보내기")
+                val dialog2 = builder2.create()
 
+                sendBtn.setOnClickListener {
+                    addItem(uid,titlename,msg.text.toString())
+                }
+                dialog2.dismiss()
+                dialog2.show()
 
-                startActivity(intent)
 
 
             }
@@ -219,6 +226,35 @@ class ItemView : Fragment() {
         }
 
         return view
+    }
+
+
+    private fun addItem(receiverName:String,itemName:String,msgsendtext:String) {
+        auth = Firebase.auth
+
+        val userEmail = auth.currentUser!!.getEmail().toString().substringBefore('@')
+
+        val senderName=userEmail
+        val receiverName=receiverName
+        val itemName=itemName
+        val msg=msgsendtext
+
+        if (msg.isEmpty()) {
+            view?.let { Snackbar.make(it, "Input text!", Snackbar.LENGTH_SHORT).show() }
+            return
+        }
+
+
+        val itemMap = hashMapOf(
+            "name" to senderName,
+            "receiverName" to receiverName,
+            "itemName" to itemName,
+            "msg" to msg
+        )
+        msgitemsCollectionRef.document().set(itemMap)
+            .addOnSuccessListener {
+            }.addOnFailureListener {  }
+
     }
 
 

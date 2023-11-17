@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="5dp"
+    android:padding="15dp"
     android:orientation="vertical">
 
     <TextView
@@ -13,7 +13,6 @@
         android:layout_height="wrap_content"
         android:singleLine="true"
         android:text="sender"
-        android:layout_margin="10dp"
         />
     <TextView
         android:id="@+id/msgtext"
@@ -21,6 +20,6 @@
         android:layout_height="wrap_content"
         android:singleLine="true"
         android:text="text"
-        android:layout_margin="10dp"
+        android:layout_margin="5dp"
         />
 </LinearLayout>
