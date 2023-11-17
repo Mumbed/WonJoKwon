@@ -45,11 +45,28 @@ class RvAdapter(val context: Context, private var items: List<Item>):
 
         //holder.view.findViewById<ImageView>(R.id.rvimageArea). = item.id
         holder.view.findViewById<TextView>(R.id.rvTextArea).text = item.name
-       /* holder.view.findViewById<TextView>(R.id.textID).setOnClickListener {
-            //AlertDialog.Builder(context).setMessage("You clicked ${student.name}.").show()
-            itemClickListener?.onItemClick(item.id)
-        }*/
+        holder.view.findViewById<TextView>(R.id.rvTextArea2).text = item.price.toString()
+        if(item.status.equals("unselled")){
+            holder.view.findViewById<TextView>(R.id.rvTextArea3).text="판매중"
+        }
+        else{
+            holder.view.findViewById<TextView>(R.id.rvTextArea3).text="판매완료"
+
+        }
+
+        /* holder.view.findViewById<TextView>(R.id.textID).setOnClickListener {
+             //AlertDialog.Builder(context).setMessage("You clicked ${student.name}.").show()
+             itemClickListener?.onItemClick(item.id)
+         }*/
         holder.view.findViewById<TextView>(R.id.rvTextArea).setOnClickListener {
+            //AlertDialog.Builder(context).setMessage("You clicked ${student.name}.").show()
+            itemClickListener?.onItemClick(item.id)//키값으로 들어갈 아이디
+        }
+        holder.view.findViewById<TextView>(R.id.rvTextArea2).setOnClickListener {
+            //AlertDialog.Builder(context).setMessage("You clicked ${student.name}.").show()
+            itemClickListener?.onItemClick(item.id)//키값으로 들어갈 아이디
+        }
+        holder.view.findViewById<TextView>(R.id.rvTextArea3).setOnClickListener {
             //AlertDialog.Builder(context).setMessage("You clicked ${student.name}.").show()
             itemClickListener?.onItemClick(item.id)//키값으로 들어갈 아이디
         }

@@ -5,10 +5,13 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
+import android.widget.Switch
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.ktx.auth
@@ -34,6 +37,8 @@ class MainActivity : AppCompatActivity(){
         recyclerViewItems.adapter = adapter
 
         updateList()  // list items on recyclerview
+
+
         adapter?.setOnItemClickListener {
             val fragment = ItemView()
             val transaction = supportFragmentManager.beginTransaction()
@@ -47,6 +52,39 @@ class MainActivity : AppCompatActivity(){
 
         }
 
+//필터링 로직
+        val filterButton = findViewById<Switch>(R.id.filter)
+
+        filterButton.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                val status = "unselled"
+                itemsCollectionRef.whereEqualTo("status", status).get()
+                    .addOnSuccessListener { querySnapshot ->
+                        val items = mutableListOf<Item>()
+                        for (doc in querySnapshot) {
+                            items.add(Item(doc))
+                        }
+                        adapter?.updateList(items)
+                    }
+                    .addOnFailureListener { exception ->
+                        // 실패할 경우 처리
+                    }
+            } else {
+                // 스위치가 비활성화되면 모든 데이터를 가져와서 리사이클러뷰 업데이트
+                itemsCollectionRef.get()
+                    .addOnSuccessListener { querySnapshot ->
+                        val items = mutableListOf<Item>()
+                        for (doc in querySnapshot) {
+                            items.add(Item(doc))
+                        }
+                        adapter?.updateList(items)
+                    }
+                    .addOnFailureListener { exception ->
+                        // 실패할 경우 처리
+                    }
+            }
+        }
+
 
 
         val fab=findViewById<FloatingActionButton>(R.id.floatingActionButton)
@@ -57,8 +95,6 @@ class MainActivity : AppCompatActivity(){
             // BottomSheetDialog에 표시할 내용을 설정
             // 여기에 여러 메뉴나 내용을 추가하면 됩니다.
             val btnMenuItem1 = view.findViewById<Button>(R.id.newItemUpdate)
-            val btnMenuItem3 = view.findViewById<Button>(R.id.settings)
-
             bottomSheetDialog.setContentView(view)
             bottomSheetDialog.show()
 
@@ -67,12 +103,53 @@ class MainActivity : AppCompatActivity(){
                 startActivity(intent)
 
             }
-            btnMenuItem3.setOnClickListener {
-                val intent= Intent(this, SettingsActivity::class.java)
-                startActivity(intent)
-            }
+
 
         }
+
+
+
+        val bottomnav=findViewById<BottomNavigationView>(R.id.bottomMenu)
+
+        bottomnav.setOnNavigationItemSelectedListener(onBottomNavItemselect)
+
+
+    }
+
+    private val onBottomNavItemselect= BottomNavigationView.OnNavigationItemSelectedListener{
+
+        when (it.itemId) {
+
+            R.id.msg->{
+
+                val intent= Intent( this, MsgActivity::class.java)
+                startActivity(intent)
+
+
+            }
+            R.id.mypage->{
+
+
+            }
+            R.id.settings->{
+
+                val fragment = SettingsFragment()
+                val transaction = supportFragmentManager.beginTransaction()
+                transaction.replace(R.id.fragment_container, fragment)
+                transaction.addToBackStack(null)
+                transaction.commit()
+
+            }
+
+
+
+
+
+
+        }
+
+
+        true
     }
 
     override fun onResume() {
@@ -99,5 +176,7 @@ class MainActivity : AppCompatActivity(){
             adapter?.updateList(items)
         }
     }
+
+
 
 }

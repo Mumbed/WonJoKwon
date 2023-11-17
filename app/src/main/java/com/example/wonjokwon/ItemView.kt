@@ -1,6 +1,7 @@
 package com.example.wonjokwon
 
 import android.app.AlertDialog
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -12,6 +13,8 @@ import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import androidx.navigation.Navigation
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -20,6 +23,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
@@ -30,6 +34,7 @@ class ItemView : Fragment() {
     private lateinit var auth: FirebaseAuth
     private var uid=""
     private var adapter: RvAdapter? = null
+    private val msgitemsCollectionRef = db.collection("msg")
 
 
 
@@ -49,6 +54,8 @@ class ItemView : Fragment() {
             adapter?.updateList(items)
         }
     }
+
+
 
     override fun onResume() {
         super.onResume()
@@ -71,26 +78,35 @@ class ItemView : Fragment() {
         val price=view.findViewById<TextView>(R.id.ItemPrice)
         val story=view.findViewById<TextView>(R.id.ItemStory)
         val sellerid=view.findViewById<TextView>(R.id.sellerid)
-        val status=view.findViewById<TextView>(R.id.status)
+        val statustext=view.findViewById<TextView>(R.id.status)
 
 
         val Fab=view.findViewById<FloatingActionButton>(R.id.floatingActionButton2)
         val data: String? = arguments?.getString("key")
 
+        fun QueryList(itemID: String){
+            itemsCollectionRef.document(itemID.toString()).get().addOnSuccessListener {
 
-        itemsCollectionRef.document(data.toString()).get().addOnSuccessListener {
-//            editID.setText(it.id)
-//            checkAutoID.isChecked = false
-//            editID.isEnabled = true
-            title.setText("상품명 : "+it["name"].toString())
-            price.setText("가격 : "+it["price"].toString())
-            story.setText("상품설명 : "+it["story"].toString())
-            status.setText(it["status"].toString())
-            uid=it["uid"].toString()
-            sellerid.setText(it["uid"].toString()+" 님의 판매글")
-        }.addOnFailureListener {
+                title?.setText("상품명 : "+it["name"].toString())
+                price?.setText("가격 : "+it["price"].toString())
+                story?.setText("상품설명 : "+it["story"].toString())
+
+                if(it["status"].toString().equals("selled")){
+                    statustext?.setText("판매완료")
+                }
+                else {
+                    statustext?.setText("판매중")
+                }
+                uid=it["uid"].toString()
+                sellerid?.setText(it["uid"].toString()+" 님의 판매글")
+            }.addOnFailureListener {
+
+            }
 
         }
+
+
+        QueryList(data.toString())
 
         updateList()
 
@@ -124,6 +140,12 @@ class ItemView : Fragment() {
                     val buttonSave = inflater.findViewById<Button>(R.id.buttonSave)
                     val buttondelet = inflater.findViewById<Button>(R.id.buttondelet)
                     val status = inflater.findViewById<CheckBox>(R.id.status)
+                    editTitle.setText(title.text.toString().substringAfter(": "))
+                    editPrice.setText(price.text.toString().substringAfter(": "))
+                    editStory.setText(story.text.toString().substringAfter(": "))
+
+                    status.isChecked = statustext.text.toString() != "판매중"
+                    status.isChecked = statustext.text.toString() == "판매완료"
 
 
                     // 기존 판매글 내용을 가져와서 EditText에 설정
@@ -132,8 +154,11 @@ class ItemView : Fragment() {
 
                     buttonSave.setOnClickListener {
 
-                        if(status.isChecked){
-                            itemsCollectionRef.document(data.toString()).update("status", "판매완료")
+                        if(status.isChecked){//판매완료
+                            itemsCollectionRef.document(data.toString()).update("status", "selled")
+                                .addOnSuccessListener { updateList() }
+                        }else{
+                            itemsCollectionRef.document(data.toString()).update("status", "unselled")
                                 .addOnSuccessListener { updateList() }
                         }
 
@@ -147,10 +172,15 @@ class ItemView : Fragment() {
                             .addOnSuccessListener { updateList() }
 
 
+                        QueryList(data.toString())
+
                         updateList()
+
 
                         // 다이얼로그를 닫음
                         dialog.dismiss()
+
+
                     }
                     buttondelet.setOnClickListener {
                         itemsCollectionRef.document(data.toString()).delete()
@@ -164,19 +194,67 @@ class ItemView : Fragment() {
                     dialog.show()
 
 
+
+
                 }
                 else{
                     Toast.makeText(context,"판매자만 수정가능합니다.", Toast.LENGTH_SHORT).show()
                 }
             }
 
-            btnMenuItem2.setOnClickListener {
+            btnMenuItem2.setOnClickListener {//메세지 전송 로직
+                val builder2 = AlertDialog.Builder(context)
+                val inflater2 = layoutInflater.inflate(R.layout.msgdialog, null)
+                builder2.setView(inflater2)
+
+                val msg=inflater2.findViewById<EditText>(R.id.msgText)
+                val sendBtn=inflater2.findViewById<Button>(R.id.buttonSend)
+                val titlename=title.text.toString().substringAfter(": ")
+                inflater2.findViewById<TextView>(R.id.msgDialogTitle).setText(uid+"님에게 메세지 보내기")
+                val dialog2 = builder2.create()
+
+                sendBtn.setOnClickListener {
+                    addItem(uid,titlename,msg.text.toString())
+                }
+                dialog2.dismiss()
+                dialog2.show()
+
+
 
             }
 
         }
 
         return view
+    }
+
+
+    private fun addItem(receiverName:String,itemName:String,msgsendtext:String) {
+        auth = Firebase.auth
+
+        val userEmail = auth.currentUser!!.getEmail().toString().substringBefore('@')
+
+        val senderName=userEmail
+        val receiverName=receiverName
+        val itemName=itemName
+        val msg=msgsendtext
+
+        if (msg.isEmpty()) {
+            view?.let { Snackbar.make(it, "Input text!", Snackbar.LENGTH_SHORT).show() }
+            return
+        }
+
+
+        val itemMap = hashMapOf(
+            "name" to senderName,
+            "receiverName" to receiverName,
+            "itemName" to itemName,
+            "msg" to msg
+        )
+        msgitemsCollectionRef.document().set(itemMap)
+            .addOnSuccessListener {
+            }.addOnFailureListener {  }
+
     }
 
 
