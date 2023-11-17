@@ -20,6 +20,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
@@ -31,7 +32,11 @@ class ItemView : Fragment() {
     private var uid=""
     private var adapter: RvAdapter? = null
 
-
+    val title=view?.findViewById<TextView>(R.id.ItemTitle)
+    val price=view?.findViewById<TextView>(R.id.ItemPrice)
+    val story=view?.findViewById<TextView>(R.id.ItemStory)
+    val sellerid=view?.findViewById<TextView>(R.id.sellerid)
+    val status=view?.findViewById<TextView>(R.id.status)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,6 +54,7 @@ class ItemView : Fragment() {
             adapter?.updateList(items)
         }
     }
+
 
     override fun onResume() {
         super.onResume()
@@ -71,30 +77,35 @@ class ItemView : Fragment() {
         val price=view.findViewById<TextView>(R.id.ItemPrice)
         val story=view.findViewById<TextView>(R.id.ItemStory)
         val sellerid=view.findViewById<TextView>(R.id.sellerid)
-        val status=view.findViewById<TextView>(R.id.status)
+        val statustext=view.findViewById<TextView>(R.id.status)
 
 
         val Fab=view.findViewById<FloatingActionButton>(R.id.floatingActionButton2)
         val data: String? = arguments?.getString("key")
 
+        fun QueryList(itemID: String){
+            itemsCollectionRef.document(itemID.toString()).get().addOnSuccessListener {
 
-        itemsCollectionRef.document(data.toString()).get().addOnSuccessListener {
+                title?.setText("상품명 : "+it["name"].toString())
+                price?.setText("가격 : "+it["price"].toString())
+                story?.setText("상품설명 : "+it["story"].toString())
 
-            title.setText("상품명 : "+it["name"].toString())
-            price.setText("가격 : "+it["price"].toString())
-            story.setText("상품설명 : "+it["story"].toString())
+                if(it["status"].toString().equals("selled")){
+                    statustext?.setText("판매완료")
+                }
+                else {
+                    statustext?.setText("판매중")
+                }
+                uid=it["uid"].toString()
+                sellerid?.setText(it["uid"].toString()+" 님의 판매글")
+            }.addOnFailureListener {
 
-            if(it["status"].toString().equals("selled")){
-                status.setText("판매완료")
             }
-            else {
-                status.setText("판매중")
-            }
-            uid=it["uid"].toString()
-            sellerid.setText(it["uid"].toString()+" 님의 판매글")
-        }.addOnFailureListener {
 
         }
+
+
+        QueryList(data.toString())
 
         updateList()
 
@@ -128,6 +139,12 @@ class ItemView : Fragment() {
                     val buttonSave = inflater.findViewById<Button>(R.id.buttonSave)
                     val buttondelet = inflater.findViewById<Button>(R.id.buttondelet)
                     val status = inflater.findViewById<CheckBox>(R.id.status)
+                    editTitle.setText(title.text.toString().substringAfter(": "))
+                    editPrice.setText(price.text.toString().substringAfter(": "))
+                    editStory.setText(story.text.toString().substringAfter(": "))
+
+                    status.isChecked = statustext.text.toString() != "판매중"
+                    status.isChecked = statustext.text.toString() == "판매완료"
 
 
                     // 기존 판매글 내용을 가져와서 EditText에 설정
@@ -154,10 +171,15 @@ class ItemView : Fragment() {
                             .addOnSuccessListener { updateList() }
 
 
+                        QueryList(data.toString())
+
                         updateList()
+
 
                         // 다이얼로그를 닫음
                         dialog.dismiss()
+
+
                     }
                     buttondelet.setOnClickListener {
                         itemsCollectionRef.document(data.toString()).delete()
@@ -169,6 +191,8 @@ class ItemView : Fragment() {
                     }
 
                     dialog.show()
+
+
 
 
                 }
