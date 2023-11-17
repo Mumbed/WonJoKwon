@@ -1,5 +1,6 @@
 package com.example.wonjokwon
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
@@ -33,6 +34,8 @@ class NewItemsUpdate : AppCompatActivity() {
 
         findViewById<Button>(R.id.buttonAddUpdate)?.setOnClickListener {
             addItem()
+            val intent= Intent(this, MainActivity::class.java)
+            startActivity(intent)
         }
 
 
@@ -56,7 +59,7 @@ class NewItemsUpdate : AppCompatActivity() {
         val name = editItemName.text.toString()
         val story=ItemStory.text.toString()
         val price = editPrice.text.toString().toInt()
-        val status="selled"
+        val status="unselled"
         if (name.isEmpty()) {
             Snackbar.make(editItemName, "Input name!", Snackbar.LENGTH_SHORT).show()
             return

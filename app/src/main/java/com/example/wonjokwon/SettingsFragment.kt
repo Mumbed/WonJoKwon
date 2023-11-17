@@ -8,10 +8,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 
 class SettingsFragment : Fragment() {
+    private lateinit var auth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,6 +26,12 @@ class SettingsFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         val view=inflater.inflate(R.layout.fragment_settings, container, false)
+
+        auth = Firebase.auth
+
+        val userEmail = auth.currentUser!!.getEmail().toString().substringBefore('@')
+
+        view.findViewById<TextView>(R.id.userID).setText(userEmail+" 님")
 
 
 

@@ -128,7 +128,11 @@ class MainActivity : AppCompatActivity(){
 
             }
             R.id.mypage->{
-
+                val fragment = MypageFragment()
+                val transaction = supportFragmentManager.beginTransaction()
+                transaction.replace(R.id.fragment_container, fragment)
+                transaction.addToBackStack(null)
+                transaction.commit()
 
             }
             R.id.settings->{
