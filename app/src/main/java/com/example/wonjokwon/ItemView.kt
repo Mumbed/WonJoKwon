@@ -1,6 +1,7 @@
 package com.example.wonjokwon
 
 import android.app.AlertDialog
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -12,6 +13,8 @@ import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import androidx.navigation.Navigation
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -54,6 +57,7 @@ class ItemView : Fragment() {
             adapter?.updateList(items)
         }
     }
+
 
 
     override fun onResume() {
@@ -201,7 +205,14 @@ class ItemView : Fragment() {
                 }
             }
 
-            btnMenuItem2.setOnClickListener {
+            btnMenuItem2.setOnClickListener {//메세지 전송 로직
+                val intent= Intent(requireActivity(), MsgActivity::class.java)
+                val titlename=title.text.toString().substringAfter(": ")
+                intent.putExtra("Receiver",uid+","+titlename)
+
+
+                startActivity(intent)
+
 
             }
 

@@ -121,12 +121,9 @@ class MainActivity : AppCompatActivity(){
         when (it.itemId) {
 
             R.id.msg->{
-                val fragment = MsgFragment()
-                val transaction = supportFragmentManager.beginTransaction()
-                transaction.replace(R.id.fragment_container, fragment)
-                transaction.addToBackStack(null)
-                transaction.commit()
 
+                val intent= Intent( this, MsgActivity::class.java)
+                startActivity(intent)
 
 
             }
