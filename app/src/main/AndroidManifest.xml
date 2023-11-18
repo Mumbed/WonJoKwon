@@ -15,9 +15,7 @@
         <activity
             android:name=".MsgActivity"
             android:exported="false" />
-        <activity
-            android:name=".ChatingActivity"
-            android:exported="false" />
+
         <activity
             android:name=".NewItemsUpdate"
             android:exported="false" />
