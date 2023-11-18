@@ -24,7 +24,7 @@ class JoinActivity : AppCompatActivity() {
         val email = findViewById<TextView>(R.id.emailArea)
         val password = findViewById<TextView>(R.id.passwordArea)
         val joinbtn = findViewById<Button>(R.id.joinBTN)
-
+        val already = findViewById<Button>(R.id.already)
 
         joinbtn.setOnClickListener{
 
@@ -41,6 +41,11 @@ class JoinActivity : AppCompatActivity() {
                     }
                 }
         }
+        already.setOnClickListener{
+            val intent = Intent(this, LoginAcivity::class.java)
+            startActivity(intent)
+        }
+
     }
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
