@@ -41,15 +41,10 @@ class SettingsFragment : Fragment() {
             Toast.makeText(context," 다시 회원가입 해줘", Toast.LENGTH_SHORT).show()
             startActivity(intent)
         }
-
-
-
-
-
-
         return view
     }
 
     companion object {
     }
+
 }
