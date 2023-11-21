@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.EditText
+import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
@@ -21,6 +22,8 @@ class NewItemsUpdate : AppCompatActivity() {
     private var adapter: RvAdapter? = null
     private val db: FirebaseFirestore = Firebase.firestore
     private val itemsCollectionRef = db.collection("items")
+    private val usersInfoCollectionRef = db.collection("UsersInfo")
+
     private val editPrice by lazy {findViewById<EditText>(R.id.editPrice)}
     private val editItemName by lazy {findViewById<EditText>(R.id.editItemName)}
     private val ItemStory by lazy {findViewById<EditText>(R.id.Updatestory)}
@@ -33,13 +36,40 @@ class NewItemsUpdate : AppCompatActivity() {
 
 
         findViewById<Button>(R.id.buttonAddUpdate)?.setOnClickListener {
-            addItem()
+
+            updateUserInfoList { name ->
+                // 이곳에서 name을 사용하거나 처리할 작업을 수행
+                    addItem(name)
+                println("User name: $name")
+            }
             val intent= Intent(this, MainActivity::class.java)
             startActivity(intent)
         }
 
 
     }
+
+
+    private fun updateUserInfoList(callback: (String) -> Unit) {
+        val auth = Firebase.auth
+        val userEmail = auth.currentUser?.email?.substringBefore('@') ?: ""
+
+        usersInfoCollectionRef.get().addOnSuccessListener { querySnapshot ->
+            var name = ""
+
+            for (doc in querySnapshot) {
+                val uid = doc.getString("uid")
+
+                if (userEmail == uid) {
+                    name = doc.getString("name") ?: ""
+                    break
+                }
+            }
+
+            callback(name)
+        }
+    }
+
 
     private fun updateList() {
         itemsCollectionRef.get().addOnSuccessListener {
@@ -50,12 +80,10 @@ class NewItemsUpdate : AppCompatActivity() {
             adapter?.updateList(items)
         }
     }
-    private fun addItem() {
+    private fun addItem(UserName :String) {
         auth = Firebase.auth
 
-        val userEmail = auth.currentUser!!.getEmail().toString().substringBefore('@')
-
-        val uid=userEmail
+        val uid=UserName
         val name = editItemName.text.toString()
         val story=ItemStory.text.toString()
         val price = editPrice.text.toString().toInt()

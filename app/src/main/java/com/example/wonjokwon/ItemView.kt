@@ -35,6 +35,7 @@ class ItemView : Fragment() {
     private var uid=""
     private var adapter: RvAdapter? = null
     private val msgitemsCollectionRef = db.collection("msg")
+    private val usersInfoCollectionRef = db.collection("UsersInfo")
 
 
 
@@ -67,6 +68,26 @@ class ItemView : Fragment() {
         updateList()
     }
 
+
+    private fun updateUserInfoList(callback: (String) -> Unit) {
+        val auth = Firebase.auth
+        val userEmail = auth.currentUser?.email?.substringBefore('@') ?: ""
+
+        usersInfoCollectionRef.get().addOnSuccessListener { querySnapshot ->
+            var name = ""
+
+            for (doc in querySnapshot) {
+                val uid = doc.getString("uid")
+
+                if (userEmail == uid) {
+                    name = doc.getString("uid") ?: ""
+                    break
+                }
+            }
+
+            callback(name)
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -126,80 +147,90 @@ class ItemView : Fragment() {
             btnMenuItem1.setOnClickListener {
                 auth = Firebase.auth
                 val userEmail = auth.currentUser!!.getEmail().toString().substringBefore('@')
+                updateUserInfoList { name ->
+                    // 이곳에서 name을 사용하거나 처리할 작업을 수행
 
-                if(userEmail.equals(uid)){
-                    Toast.makeText(context,"판매글을 수정해보에요!!.", Toast.LENGTH_SHORT).show()
-                    val builder = AlertDialog.Builder(context)
-                    val inflater = layoutInflater.inflate(R.layout.dialogeditpost, null)
-                    builder.setView(inflater)
-
-                    val editTitle = inflater.findViewById<EditText>(R.id.editTitle)
-                    val editPrice = inflater.findViewById<EditText>(R.id.editPrice)
-                    val editStory = inflater.findViewById<EditText>(R.id.editStory)
-
-                    val buttonSave = inflater.findViewById<Button>(R.id.buttonSave)
-                    val buttondelet = inflater.findViewById<Button>(R.id.buttondelet)
-                    val status = inflater.findViewById<CheckBox>(R.id.status)
-                    editTitle.setText(title.text.toString().substringAfter(": "))
-                    editPrice.setText(price.text.toString().substringAfter(": "))
-                    editStory.setText(story.text.toString().substringAfter(": "))
-
-                    status.isChecked = statustext.text.toString() != "판매중"
-                    status.isChecked = statustext.text.toString() == "판매완료"
+                    println("User name: $name")
 
 
-                    // 기존 판매글 내용을 가져와서 EditText에 설정
+                    if (userEmail.equals(name)) {
+                        Toast.makeText(context, "판매글을 수정해보에요!!.", Toast.LENGTH_SHORT).show()
+                        val builder = AlertDialog.Builder(context)
+                        val inflater = layoutInflater.inflate(R.layout.dialogeditpost, null)
+                        builder.setView(inflater)
 
-                    val dialog = builder.create()
+                        val editTitle = inflater.findViewById<EditText>(R.id.editTitle)
+                        val editPrice = inflater.findViewById<EditText>(R.id.editPrice)
+                        val editStory = inflater.findViewById<EditText>(R.id.editStory)
 
-                    buttonSave.setOnClickListener {
+                        val buttonSave = inflater.findViewById<Button>(R.id.buttonSave)
+                        val buttondelet = inflater.findViewById<Button>(R.id.buttondelet)
+                        val status = inflater.findViewById<CheckBox>(R.id.status)
+                        editTitle.setText(title.text.toString().substringAfter(": "))
+                        editPrice.setText(price.text.toString().substringAfter(": "))
+                        editStory.setText(story.text.toString().substringAfter(": "))
 
-                        if(status.isChecked){//판매완료
-                            itemsCollectionRef.document(data.toString()).update("status", "selled")
+                        status.isChecked = statustext.text.toString() != "판매중"
+                        status.isChecked = statustext.text.toString() == "판매완료"
+
+
+                        // 기존 판매글 내용을 가져와서 EditText에 설정
+
+                        val dialog = builder.create()
+
+                        buttonSave.setOnClickListener {
+
+                            if (status.isChecked) {//판매완료
+                                itemsCollectionRef.document(data.toString())
+                                    .update("status", "selled")
+                                    .addOnSuccessListener { updateList() }
+                            } else {
+                                itemsCollectionRef.document(data.toString())
+                                    .update("status", "unselled")
+                                    .addOnSuccessListener { updateList() }
+                            }
+
+                            itemsCollectionRef.document(data.toString())
+                                .update("name", editTitle.text.toString())
                                 .addOnSuccessListener { updateList() }
-                        }else{
-                            itemsCollectionRef.document(data.toString()).update("status", "unselled")
+
+                            itemsCollectionRef.document(data.toString())
+                                .update("price", editPrice.text.toString())
                                 .addOnSuccessListener { updateList() }
+
+                            itemsCollectionRef.document(data.toString())
+                                .update("story", editStory.text.toString())
+                                .addOnSuccessListener { updateList() }
+
+
+                            QueryList(data.toString())
+
+                            updateList()
+
+
+                            // 다이얼로그를 닫음
+                            dialog.dismiss()
+
+
+                        }
+                        buttondelet.setOnClickListener {
+                            itemsCollectionRef.document(data.toString()).delete()
+                                .addOnSuccessListener { updateList() }
+
+                            updateList()
+
+                            dialog.dismiss()
                         }
 
-                        itemsCollectionRef.document(data.toString()).update("name", editTitle.text.toString())
-                            .addOnSuccessListener { updateList() }
-
-                        itemsCollectionRef.document(data.toString()).update("price", editPrice.text.toString())
-                            .addOnSuccessListener { updateList() }
-
-                        itemsCollectionRef.document(data.toString()).update("story",editStory.text.toString())
-                            .addOnSuccessListener { updateList() }
-
-
-                        QueryList(data.toString())
-
-                        updateList()
-
-
-                        // 다이얼로그를 닫음
-                        dialog.dismiss()
+                        dialog.show()
 
 
                     }
-                    buttondelet.setOnClickListener {
-                        itemsCollectionRef.document(data.toString()).delete()
-                            .addOnSuccessListener { updateList() }
-
-                        updateList()
-
-                        dialog.dismiss()
+                    else{
+                        Toast.makeText(context,"판매자만 수정가능합니다.", Toast.LENGTH_SHORT).show()
                     }
-
-                    dialog.show()
-
-
-
-
                 }
-                else{
-                    Toast.makeText(context,"판매자만 수정가능합니다.", Toast.LENGTH_SHORT).show()
-                }
+
             }
 
             btnMenuItem2.setOnClickListener {//메세지 전송 로직

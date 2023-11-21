@@ -19,6 +19,8 @@ class MypageFragment : Fragment() {
     private val db: FirebaseFirestore = Firebase.firestore
     private var adapter: RvAdapter? = null
     private val itemsCollectionRef = db.collection("items")
+    private val usersInfoCollectionRef = db.collection("UsersInfo")
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,6 +36,25 @@ class MypageFragment : Fragment() {
         }
     }
 
+    private fun updateUserInfoList(callback: (String) -> Unit) {
+        val auth = Firebase.auth
+        val userEmail = auth.currentUser?.email?.substringBefore('@') ?: ""
+
+        usersInfoCollectionRef.get().addOnSuccessListener { querySnapshot ->
+            var name = ""
+
+            for (doc in querySnapshot) {
+                val uid = doc.getString("uid")
+
+                if (userEmail == uid) {
+                    name = doc.getString("name") ?: ""
+                    break
+                }
+            }
+
+            callback(name)
+        }
+    }
 
 
     override fun onCreateView(
@@ -49,7 +70,14 @@ class MypageFragment : Fragment() {
 
         val userEmail = auth.currentUser!!.getEmail().toString().substringBefore('@')
 
-        view.findViewById<TextView>(R.id.userID).setText(userEmail+" 님의 판매글")
+        updateUserInfoList { name ->
+            // 이곳에서 name을 사용하거나 처리할 작업을 수행
+            val textView = view.findViewById<TextView>(R.id.userID)
+            textView.post {
+                textView.text = "$name 님의 판매글"
+            }
+            println("User name: $name")
+        }
         recyclerViewItems.layoutManager = LinearLayoutManager(requireContext())
         adapter = RvAdapter(requireContext(), emptyList())
 
