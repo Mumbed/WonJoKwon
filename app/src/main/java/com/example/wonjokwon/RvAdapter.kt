@@ -8,15 +8,30 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.google.firebase.firestore.QueryDocumentSnapshot
 
 
-data class Item(val id: String, val name: String,val story:String ,val status:String,val price: Int) {
+data class Item(
+    val id: String,
+    val name: String,
+    val story: String,
+    val status: String,
+    val price: Int,
+    val imageUrl: String // 이미지 URL 필드 추가
+) {
     constructor(doc: QueryDocumentSnapshot) :
-            this(doc.id, doc["name"].toString(), doc["story"].toString(),doc["status"].toString(),doc["price"].toString().toIntOrNull() ?: 0)
-    constructor(key: String, map: Map<*, *>) :
-            this(key, map["name"].toString(), map["story"].toString(),map["status"].toString(), map["price"].toString().toIntOrNull() ?: 0)
+            this(
+                doc.id,
+                doc["name"].toString(),
+                doc["story"].toString(),
+                doc["status"].toString(),
+                doc["price"].toString().toIntOrNull() ?: 0,
+                doc["imageUrl"].toString() // Firestore 문서에서 imageUrl 필드 읽기
+            )
+
 }
+
 class MyViewHolder(val view: View) : RecyclerView.ViewHolder(view)
 
 class RvAdapter(val context: Context, private var items: List<Item>):
@@ -42,7 +57,8 @@ class RvAdapter(val context: Context, private var items: List<Item>):
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val item = items[position]
-
+        val imageView = holder.view.findViewById<ImageView>(R.id.rvimageArea)
+        Glide.with(context).load(item.imageUrl).into(imageView)
         //holder.view.findViewById<ImageView>(R.id.rvimageArea). = item.id
         holder.view.findViewById<TextView>(R.id.rvTextArea).text = item.name
         holder.view.findViewById<TextView>(R.id.rvTextArea2).text = item.price.toString()

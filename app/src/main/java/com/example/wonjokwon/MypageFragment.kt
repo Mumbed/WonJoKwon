@@ -28,9 +28,13 @@ class MypageFragment : Fragment() {
 
     }
     private fun updateList() {
+        val auth = Firebase.auth
+        val userEmail = auth.currentUser?.email?.substringBefore('@') ?: ""
         itemsCollectionRef.get().addOnSuccessListener {
             val items = mutableListOf<Item>()
+
             for (doc in it) {
+                if(doc.getString("uid")==userEmail)
                 items.add(Item(doc))
             }
             adapter?.updateList(items)

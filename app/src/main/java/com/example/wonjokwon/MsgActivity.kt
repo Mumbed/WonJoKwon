@@ -2,14 +2,10 @@ package com.example.wonjokwon
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Button
-import android.widget.EditText
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -23,6 +19,8 @@ class MsgActivity : AppCompatActivity() {
     private val db: FirebaseFirestore = Firebase.firestore
 
     private val msgitemsCollectionRef = db.collection("msg")
+    private val usersInfoCollectionRef = db.collection("UsersInfo")
+
     override fun onStart() {
         updateList()
         super.onStart()
@@ -37,6 +35,24 @@ class MsgActivity : AppCompatActivity() {
         recyclerViewItems.adapter = adapter
         updateList()
 
+    }
+    private fun ueserInfo(callback: (String) -> Unit){
+        val userEmail = auth.currentUser!!.getEmail().toString().substringBefore('@')
+
+        usersInfoCollectionRef.get().addOnSuccessListener { querySnapshot ->
+            var name = ""
+
+            for (doc in querySnapshot) {
+                val uid = doc.getString("uid")
+
+                if (userEmail == uid) {
+                    name = doc.getString("name") ?: ""
+                    break
+                }
+            }
+            callback(name)
+
+        }
     }
 
     private fun updateList() {
@@ -59,6 +75,26 @@ class MsgActivity : AppCompatActivity() {
             adapter?.msgUpdateList(items)
         }
     }
+//
+//
+//    private fun updateList() {
+//        auth = Firebase.auth
+//
+//            msgitemsCollectionRef.get().addOnSuccessListener {
+//
+//                val items = mutableListOf<MsgItem>()
+//                for (doc in it) {
+//                        if (revname == (doc.getString("receiverName").toString())) {
+//                            items.add(MsgItem(doc))
+//                            adapter?.msgUpdateList(items)
+//
+//                    }
+//                }
+//                adapter?.msgUpdateList(items)
+//
+//        }
+//
+//    }
 
     override fun onResume() {
         super.onResume()

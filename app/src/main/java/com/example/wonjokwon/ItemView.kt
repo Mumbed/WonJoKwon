@@ -245,7 +245,7 @@ class ItemView : Fragment() {
                 val msg=inflater2.findViewById<EditText>(R.id.msgText)
                 val sendBtn=inflater2.findViewById<Button>(R.id.buttonSend)
                 val titlename=title.text.toString().substringAfter(": ")
-                inflater2.findViewById<TextView>(R.id.msgDialogTitle).setText(uid+"님에게 메세지 보내기")
+                inflater2.findViewById<TextView>(R.id.msgDialogTitle).setText(username+"님에게 메세지 보내기")
                 val dialog2 = builder2.create()
 
                 sendBtn.setOnClickListener {
@@ -264,31 +264,51 @@ class ItemView : Fragment() {
     }
 
 
-    private fun addItem(receiverName:String,itemName:String,msgsendtext:String) {
-        auth = Firebase.auth
-
+    private fun ueserInfo(callback: (String) -> Unit){
         val userEmail = auth.currentUser!!.getEmail().toString().substringBefore('@')
 
-        val senderName=userEmail
+        usersInfoCollectionRef.get().addOnSuccessListener { querySnapshot ->
+            var name = ""
+
+            for (doc in querySnapshot) {
+                val uid = doc.getString("uid")
+
+                if (userEmail == uid) {
+                    name = doc.getString("name") ?: ""
+                    break
+                }
+            }
+            callback(name)
+
+        }
+    }
+
+    private fun addItem(receiverName:String,itemName:String,msgsendtext:String) {
+        auth = Firebase.auth
         val receiverName=receiverName
         val itemName=itemName
         val msg=msgsendtext
-
         if (msg.isEmpty()) {
             view?.let { Snackbar.make(it, "Input text!", Snackbar.LENGTH_SHORT).show() }
             return
         }
+        ueserInfo{name ->
 
 
-        val itemMap = hashMapOf(
-            "name" to senderName,
-            "receiverName" to receiverName,
-            "itemName" to itemName,
-            "msg" to msg
-        )
-        msgitemsCollectionRef.document().set(itemMap)
-            .addOnSuccessListener {
-            }.addOnFailureListener {  }
+            val itemMap = hashMapOf(
+                "name" to name,
+                "receiverName" to receiverName,
+                "itemName" to itemName,
+                "msg" to msg
+            )
+            msgitemsCollectionRef.document().set(itemMap)
+                .addOnSuccessListener {
+                }.addOnFailureListener {  }
+
+
+        }
+
+
 
     }
 
