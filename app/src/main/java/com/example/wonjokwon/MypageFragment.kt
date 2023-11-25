@@ -83,6 +83,7 @@ class MypageFragment : Fragment() {
                 textView.text = "$name 님의 판매글"
             }
             birthText.post{
+                //여기부분 추가
                 birthText.text="생년월일 $birth"
             }
             println("User name: $name")
