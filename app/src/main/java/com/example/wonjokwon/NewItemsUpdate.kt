@@ -83,7 +83,9 @@ class NewItemsUpdate : AppCompatActivity() {
     private fun addItem(UserName :String) {
         auth = Firebase.auth
 
-        val uid=UserName
+        val username=UserName
+        val uid= auth.currentUser?.email?.substringBefore('@') ?: ""
+
         val name = editItemName.text.toString()
         val story=ItemStory.text.toString()
         val price = editPrice.text.toString().toInt()
@@ -100,6 +102,7 @@ class NewItemsUpdate : AppCompatActivity() {
 
         val itemMap = hashMapOf(
             "uid" to uid,
+            "username" to username,
             "name" to name,
             "story" to story,
             "price" to price,

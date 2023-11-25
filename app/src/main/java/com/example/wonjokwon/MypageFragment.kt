@@ -1,5 +1,6 @@
 package com.example.wonjokwon
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -36,27 +37,31 @@ class MypageFragment : Fragment() {
         }
     }
 
-    private fun updateUserInfoList(callback: (String) -> Unit) {
+    private fun updateUserInfoList(callback: (String,String) -> Unit) {
         val auth = Firebase.auth
         val userEmail = auth.currentUser?.email?.substringBefore('@') ?: ""
 
         usersInfoCollectionRef.get().addOnSuccessListener { querySnapshot ->
             var name = ""
+            var birth=""
 
             for (doc in querySnapshot) {
                 val uid = doc.getString("uid")
 
                 if (userEmail == uid) {
                     name = doc.getString("name") ?: ""
+                    birth=doc.getString("birth")?:""
                     break
                 }
             }
 
-            callback(name)
+            callback(name,birth)
+
         }
     }
 
 
+    @SuppressLint("SetTextI18n")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -70,11 +75,15 @@ class MypageFragment : Fragment() {
 
         val userEmail = auth.currentUser!!.getEmail().toString().substringBefore('@')
 
-        updateUserInfoList { name ->
+        updateUserInfoList {name, birth ->
             // 이곳에서 name을 사용하거나 처리할 작업을 수행
             val textView = view.findViewById<TextView>(R.id.userID)
+            val birthText=view.findViewById<TextView>(R.id.birth)
             textView.post {
                 textView.text = "$name 님의 판매글"
+            }
+            birthText.post{
+                birthText.text="생년월일 $birth"
             }
             println("User name: $name")
         }

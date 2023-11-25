@@ -52,7 +52,6 @@ class JoinActivity : AppCompatActivity() {
         alreadyJoined.setOnClickListener {
 
             val intent= Intent(this, LoginAcivity::class.java)
-            addItem(nameText.text.toString(),birthText.text.toString())
             Toast.makeText(this," 로그인 해주세요 ", Toast.LENGTH_SHORT).show()
             startActivity(intent)
         }

@@ -15,6 +15,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.navigation.Navigation
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -32,7 +33,9 @@ class ItemView : Fragment() {
     private val db: FirebaseFirestore = Firebase.firestore
     private val itemsCollectionRef = db.collection("items")
     private lateinit var auth: FirebaseAuth
+    private var username=""
     private var uid=""
+
     private var adapter: RvAdapter? = null
     private val msgitemsCollectionRef = db.collection("msg")
     private val usersInfoCollectionRef = db.collection("UsersInfo")
@@ -118,8 +121,9 @@ class ItemView : Fragment() {
                 else {
                     statustext?.setText("판매중")
                 }
+                username=it["username"].toString()
+                sellerid?.setText(it["username"].toString()+" 님의 판매글")
                 uid=it["uid"].toString()
-                sellerid?.setText(it["uid"].toString()+" 님의 판매글")
             }.addOnFailureListener {
 
             }
@@ -153,8 +157,8 @@ class ItemView : Fragment() {
                     println("User name: $name")
 
 
-                    if (userEmail.equals(name)) {
-                        Toast.makeText(context, "판매글을 수정해보에요!!.", Toast.LENGTH_SHORT).show()
+                    if (userEmail == uid) {
+                        Toast.makeText(context, "판매글을 수정해보세요!!.", Toast.LENGTH_SHORT).show()
                         val builder = AlertDialog.Builder(context)
                         val inflater = layoutInflater.inflate(R.layout.dialogeditpost, null)
                         builder.setView(inflater)
