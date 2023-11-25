@@ -28,6 +28,7 @@
         android:layout_height="50dp"
         />
     <EditText
+        android:id="@+id/userName"
         android:layout_width="match_parent"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
@@ -36,6 +37,7 @@
         android:layout_height="50dp"
         />
     <EditText
+        android:id="@+id/userBirth"
         android:layout_width="match_parent"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
@@ -56,6 +58,15 @@
         android:layout_height="wrap_content"/>
 
     <Button
+        android:id="@+id/alreadyJoined"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginTop="30dp"
+        android:padding="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="회원이신가요?" />
+
         android:id="@+id/already"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

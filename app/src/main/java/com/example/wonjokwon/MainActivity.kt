@@ -32,6 +32,7 @@ class MainActivity : AppCompatActivity(){
     override fun onCreate(savedInstanceState: Bundle?){
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        updateList()  // list items on recyclerview
 
         recyclerViewItems.layoutManager = LinearLayoutManager(this)
         adapter = RvAdapter(this, emptyList())
@@ -150,6 +151,12 @@ class MainActivity : AppCompatActivity(){
 
     override fun onBackPressed() {
         super.onBackPressed()
+        updateList()
+
+    }
+
+    override fun onStart() {
+        super.onStart()
         updateList()
 
     }

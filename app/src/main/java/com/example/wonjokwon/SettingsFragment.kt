@@ -38,7 +38,8 @@ class SettingsFragment : Fragment() {
         val logout=view.findViewById<TextView>(R.id.Logout)
         logout.setOnClickListener{
             Firebase.auth.signOut()
-            val intent= Intent(requireActivity(), LoginAcivity::class.java)
+
+            val intent= Intent(requireActivity(), JoinActivity::class.java)
             Toast.makeText(context," 다시 로그인 해주세요 ", Toast.LENGTH_SHORT).show()
             startActivity(intent)
         }
@@ -46,7 +47,7 @@ class SettingsFragment : Fragment() {
         join.setOnClickListener{
             Firebase.auth.signOut()
             val intent= Intent(requireActivity(), JoinActivity::class.java)
-            Toast.makeText(context," 다시 회원가입 해줘", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context," 다시 회원가입 해주세요", Toast.LENGTH_SHORT).show()
             startActivity(intent)
         }
         return view

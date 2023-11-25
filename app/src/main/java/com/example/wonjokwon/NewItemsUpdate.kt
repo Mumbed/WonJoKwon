@@ -1,6 +1,7 @@
 package com.example.wonjokwon
 
 import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
@@ -8,6 +9,8 @@ import android.view.MenuItem
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.EditText
+import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
@@ -16,6 +19,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
 
 class NewItemsUpdate : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
@@ -23,9 +27,23 @@ class NewItemsUpdate : AppCompatActivity() {
     private var adapter: RvAdapter? = null
     private val db: FirebaseFirestore = Firebase.firestore
     private val itemsCollectionRef = db.collection("items")
+    private val usersInfoCollectionRef = db.collection("UsersInfo")
     private val editPrice by lazy {findViewById<EditText>(R.id.editPrice)}
     private val editItemName by lazy {findViewById<EditText>(R.id.editItemName)}
     private val ItemStory by lazy {findViewById<EditText>(R.id.Updatestory)}
+
+    private var selectedImageUri: Uri? = null
+
+
+    override fun onStop() {
+        super.onStop()
+        updateList()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        updateList()
+    }
 
 
 
@@ -34,14 +52,51 @@ class NewItemsUpdate : AppCompatActivity() {
         setContentView(R.layout.activity_new_items_update)
 
 
-        findViewById<Button>(R.id.buttonAddUpdate)?.setOnClickListener {
-            addItem()
+        findViewById<Button>(R.id.buttonSelectImage).setOnClickListener {
+            val intent = Intent(Intent.ACTION_PICK)
+            intent.type = "image/*"
+            startActivityForResult(intent, REQUEST_CODE_IMAGE_PICK)
+        }
+
+
+        findViewById<Button>(R.id.buttonAddUpdate).setOnClickListener {
+            selectedImageUri?.let { uri ->
+                updateUserInfoList { name ->
+                    addItem(name, uri)
+                    updateList()
+                }
+            } ?: run {
+                Toast.makeText(this, "Please select an image", Toast.LENGTH_SHORT).show()
+            }
+            updateList()
             val intent= Intent(this, MainActivity::class.java)
             startActivity(intent)
         }
 
 
     }
+
+
+    private fun updateUserInfoList(callback: (String) -> Unit) {
+        val auth = Firebase.auth
+        val userEmail = auth.currentUser?.email?.substringBefore('@') ?: ""
+
+        usersInfoCollectionRef.get().addOnSuccessListener { querySnapshot ->
+            var name = ""
+
+            for (doc in querySnapshot) {
+                val uid = doc.getString("uid")
+
+                if (userEmail == uid) {
+                    name = doc.getString("name") ?: ""
+                    break
+                }
+            }
+
+            callback(name)
+        }
+    }
+
 
     private fun updateList() {
         itemsCollectionRef.get().addOnSuccessListener {
@@ -52,16 +107,26 @@ class NewItemsUpdate : AppCompatActivity() {
             adapter?.updateList(items)
         }
     }
-    private fun addItem() {
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == REQUEST_CODE_IMAGE_PICK && resultCode == RESULT_OK) {
+            selectedImageUri = data?.data
+        }
+    }
+    private fun addItem(UserName :String,imageUri: Uri) {
         auth = Firebase.auth
 
-        val userEmail = auth.currentUser!!.getEmail().toString().substringBefore('@')
+        val username = UserName
+        val uid = auth.currentUser?.email?.substringBefore('@') ?: ""
 
-        val uid=userEmail
         val name = editItemName.text.toString()
-        val story=ItemStory.text.toString()
+        val story = ItemStory.text.toString()
         val price = editPrice.text.toString().toInt()
-        val status="unselled"
+
+        val imageRef = Firebase.storage.reference.child("itemImages/${imageUri.lastPathSegment}")
+        val uploadTask = imageRef.putFile(imageUri)
+
+        val status = "unselled"
         if (name.isEmpty()) {
             Snackbar.make(editItemName, "Input name!", Snackbar.LENGTH_SHORT).show()
             return
@@ -71,6 +136,32 @@ class NewItemsUpdate : AppCompatActivity() {
             return
         }
 
+        uploadTask.continueWithTask { task ->
+            if (!task.isSuccessful) {
+                task.exception?.let { throw it }
+            }
+            imageRef.downloadUrl
+        }.addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                val downloadUrl = task.result.toString()
+
+                // Firestore에 아이템 정보와 이미지 URL 저장
+                val itemMap = hashMapOf(
+                    "uid" to uid,
+                    "username" to username,
+                    "name" to name,
+                    "story" to story,
+                    "price" to price,
+                    "status" to status,
+                    "imageUrl" to downloadUrl  // 이미지 URL 추가
+                )
+                itemsCollectionRef.document().set(itemMap)
+                    .addOnSuccessListener { updateList() }.addOnFailureListener { /* 오류 처리 */ }
+            }
+        }
+    }
+    companion object {
+        private const val REQUEST_CODE_IMAGE_PICK = 1001
 
         val itemMap = hashMapOf(
             "uid" to uid,
