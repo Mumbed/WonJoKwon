@@ -4,6 +4,7 @@ import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.EditText
@@ -61,13 +62,14 @@ class NewItemsUpdate : AppCompatActivity() {
             selectedImageUri?.let { uri ->
                 updateUserInfoList { name ->
                     addItem(name, uri)
-                    updateList()
                 }
             } ?: run {
                 Toast.makeText(this, "Please select an image", Toast.LENGTH_SHORT).show()
             }
             updateList()
             val intent= Intent(this, MainActivity::class.java)
+            updateList()
+
             startActivity(intent)
         }
 
@@ -154,7 +156,13 @@ class NewItemsUpdate : AppCompatActivity() {
                     "imageUrl" to downloadUrl  // 이미지 URL 추가
                 )
                 itemsCollectionRef.document().set(itemMap)
-                    .addOnSuccessListener { updateList() }.addOnFailureListener { /* 오류 처리 */ }
+                    .addOnSuccessListener {
+                        Log.d("NewItemUpdate", "Firestore item added successfully")
+
+                        updateList() }.addOnFailureListener {
+                            e ->
+                        Log.e("NewItemUpdate", "Error adding item to Firestore", e)
+                        /* 오류 처리 */ }
             }
         }
     }
