@@ -3,6 +3,8 @@ package com.example.wonjokwon
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.Button
 import android.widget.Switch
@@ -30,6 +32,7 @@ class MainActivity : AppCompatActivity(){
     override fun onCreate(savedInstanceState: Bundle?){
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        updateList()  // list items on recyclerview
 
         recyclerViewItems.layoutManager = LinearLayoutManager(this)
         adapter = RvAdapter(this, emptyList())
@@ -103,17 +106,11 @@ class MainActivity : AppCompatActivity(){
                 startActivity(intent)
 
             }
-
-
         }
-
-
 
         val bottomnav=findViewById<BottomNavigationView>(R.id.bottomMenu)
 
         bottomnav.setOnNavigationItemSelectedListener(onBottomNavItemselect)
-
-
     }
 
     private val onBottomNavItemselect= BottomNavigationView.OnNavigationItemSelectedListener{
@@ -121,17 +118,18 @@ class MainActivity : AppCompatActivity(){
         when (it.itemId) {
 
             R.id.msg->{
-                val fragment = MsgFragment()
-                val transaction = supportFragmentManager.beginTransaction()
-                transaction.replace(R.id.fragment_container, fragment)
-                transaction.addToBackStack(null)
-                transaction.commit()
 
+                val intent= Intent( this, MsgActivity::class.java)
+                startActivity(intent)
 
 
             }
             R.id.mypage->{
-
+                val fragment = MypageFragment()
+                val transaction = supportFragmentManager.beginTransaction()
+                transaction.replace(R.id.fragment_container, fragment)
+                transaction.addToBackStack(null)
+                transaction.commit()
 
             }
             R.id.settings->{
@@ -141,17 +139,8 @@ class MainActivity : AppCompatActivity(){
                 transaction.replace(R.id.fragment_container, fragment)
                 transaction.addToBackStack(null)
                 transaction.commit()
-
             }
-
-
-
-
-
-
         }
-
-
         true
     }
 
@@ -162,6 +151,12 @@ class MainActivity : AppCompatActivity(){
 
     override fun onBackPressed() {
         super.onBackPressed()
+        updateList()
+
+    }
+
+    override fun onStart() {
+        super.onStart()
         updateList()
 
     }
@@ -179,7 +174,20 @@ class MainActivity : AppCompatActivity(){
             adapter?.updateList(items)
         }
     }
+    //Toolbar 메뉴 클릭 이벤트
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.home -> {
+                onBackPressed()  // 뒤로가기 버튼과 동일한 동작을 수행합니다
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
 
-
-
+    // 툴바 메뉴 버튼을 설정- menu에 있는 item을 연결하는 부분
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.main_menu, menu)
+        return true
+    }
 }

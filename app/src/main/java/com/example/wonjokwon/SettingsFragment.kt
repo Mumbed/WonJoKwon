@@ -8,10 +8,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 
 class SettingsFragment : Fragment() {
+    private lateinit var auth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,12 +27,19 @@ class SettingsFragment : Fragment() {
         // Inflate the layout for this fragment
         val view=inflater.inflate(R.layout.fragment_settings, container, false)
 
+        auth = Firebase.auth
+
+        val userEmail = auth.currentUser!!.getEmail().toString().substringBefore('@')
+
+        view.findViewById<TextView>(R.id.userID).setText(userEmail+" 님")
+
 
 
         val logout=view.findViewById<TextView>(R.id.Logout)
         logout.setOnClickListener{
             Firebase.auth.signOut()
-            val intent= Intent(requireActivity(), LoginAcivity::class.java)
+
+            val intent= Intent(requireActivity(), JoinActivity::class.java)
             Toast.makeText(context," 다시 로그인 해주세요 ", Toast.LENGTH_SHORT).show()
             startActivity(intent)
         }
@@ -38,18 +47,13 @@ class SettingsFragment : Fragment() {
         join.setOnClickListener{
             Firebase.auth.signOut()
             val intent= Intent(requireActivity(), JoinActivity::class.java)
-            Toast.makeText(context," 다시 회원가입 해줘", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context," 다시 회원가입 해주세요", Toast.LENGTH_SHORT).show()
             startActivity(intent)
         }
-
-
-
-
-
-
         return view
     }
 
     companion object {
     }
+
 }
