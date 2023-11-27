@@ -23,7 +23,7 @@ class Splash : AppCompatActivity() {
         if(auth.currentUser?.uid==null){
             Handler().postDelayed({
 
-                startActivity(Intent(this, JoinActivity::class.java))
+                startActivity(Intent(this, LoginAcivity::class.java))
 
                 Toast.makeText(this," 회원가입 및 로그인을 해주세요 ", Toast.LENGTH_SHORT).show()
                 finish()

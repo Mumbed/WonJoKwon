@@ -33,7 +33,6 @@ class JoinActivity : AppCompatActivity() {
         val nameText=findViewById<TextView>(R.id.userName)
         val alreadyJoined=findViewById<Button>(R.id.alreadyJoined)
 
-        val already = findViewById<Button>(R.id.already)
 
 
         joinbtn.setOnClickListener{
@@ -52,10 +51,7 @@ class JoinActivity : AppCompatActivity() {
                     }
                 }
         }
-        already.setOnClickListener{
-            val intent = Intent(this, LoginAcivity::class.java)
-            startActivity(intent)
-        }
+
         alreadyJoined.setOnClickListener {
 
             val intent= Intent(this, LoginAcivity::class.java)

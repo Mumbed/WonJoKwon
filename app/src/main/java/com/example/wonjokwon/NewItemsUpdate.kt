@@ -162,18 +162,6 @@ class NewItemsUpdate : AppCompatActivity() {
     }
     companion object {
         private const val REQUEST_CODE_IMAGE_PICK = 1001
-
-        val itemMap = hashMapOf(
-            "uid" to uid,
-            "name" to name,
-            "story" to story,
-            "price" to price,
-            "status" to status
-
-        )
-        itemsCollectionRef.document().set(itemMap)
-            .addOnSuccessListener { updateList() }.addOnFailureListener {  }
-
     }
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {

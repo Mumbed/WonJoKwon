@@ -1,10 +1,10 @@
 package com.example.wonjokwon
 
+import android.content.ContentValues.TAG
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuItem
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.Switch
@@ -34,12 +34,25 @@ class MainActivity : AppCompatActivity(){
         setContentView(R.layout.activity_main)
         updateList()  // list items on recyclerview
 
+
         recyclerViewItems.layoutManager = LinearLayoutManager(this)
         adapter = RvAdapter(this, emptyList())
 
         recyclerViewItems.adapter = adapter
 
         updateList()  // list items on recyclerview
+
+        itemsCollectionRef.addSnapshotListener { snapshot, e ->
+            if (e != null) {
+                Log.w(TAG, "Listen failed.", e)
+                return@addSnapshotListener
+            }
+
+            if (snapshot != null && !snapshot.isEmpty) {
+                // 데이터가 변경되었을 때의 로직
+                updateList()
+            }
+        }
 
 
         adapter?.setOnItemClickListener {
@@ -106,11 +119,17 @@ class MainActivity : AppCompatActivity(){
                 startActivity(intent)
 
             }
+
+
         }
+
+
 
         val bottomnav=findViewById<BottomNavigationView>(R.id.bottomMenu)
 
         bottomnav.setOnNavigationItemSelectedListener(onBottomNavItemselect)
+
+
     }
 
     private val onBottomNavItemselect= BottomNavigationView.OnNavigationItemSelectedListener{
@@ -139,8 +158,17 @@ class MainActivity : AppCompatActivity(){
                 transaction.replace(R.id.fragment_container, fragment)
                 transaction.addToBackStack(null)
                 transaction.commit()
+
             }
+
+
+
+
+
+
         }
+
+
         true
     }
 
@@ -174,20 +202,7 @@ class MainActivity : AppCompatActivity(){
             adapter?.updateList(items)
         }
     }
-    //Toolbar 메뉴 클릭 이벤트
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.home -> {
-                onBackPressed()  // 뒤로가기 버튼과 동일한 동작을 수행합니다
-                return true
-            }
-        }
-        return super.onOptionsItemSelected(item)
-    }
 
-    // 툴바 메뉴 버튼을 설정- menu에 있는 item을 연결하는 부분
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.main_menu, menu)
-        return true
-    }
+
+
 }
