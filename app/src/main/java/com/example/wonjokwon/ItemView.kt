@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.navigation.Navigation
@@ -18,6 +19,7 @@ import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
@@ -45,9 +47,6 @@ class ItemView : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-
-
-
     }
     private fun updateList() {
         itemsCollectionRef.get().addOnSuccessListener {
@@ -58,8 +57,6 @@ class ItemView : Fragment() {
             adapter?.updateList(items)
         }
     }
-
-
 
     override fun onResume() {
         super.onResume()
@@ -103,6 +100,7 @@ class ItemView : Fragment() {
         val story=view.findViewById<TextView>(R.id.ItemStory)
         val sellerid=view.findViewById<TextView>(R.id.sellerid)
         val statustext=view.findViewById<TextView>(R.id.status)
+        val imageView = view.findViewById<ImageView>(R.id.itemImageView)
 
 
         val Fab=view.findViewById<FloatingActionButton>(R.id.floatingActionButton2)
@@ -110,7 +108,15 @@ class ItemView : Fragment() {
 
         fun QueryList(itemID: String){
             itemsCollectionRef.document(itemID.toString()).get().addOnSuccessListener {
+                val imageUrl = it["imageUrl"].toString()  // Firestore에서 이미지 URL 가져오기
 
+                // ImageView에 이미지 로딩
+                val imageView = view?.findViewById<ImageView>(R.id.itemImageView)
+                context?.let { ctx ->
+                    if (imageView != null) {
+                        Glide.with(ctx).load(imageUrl).into(imageView)
+                    }
+                }
                 title?.setText("상품명 : "+it["name"].toString())
                 price?.setText("가격 : "+it["price"].toString())
                 story?.setText("상품설명 : "+it["story"].toString())
@@ -127,6 +133,7 @@ class ItemView : Fragment() {
             }.addOnFailureListener {
 
             }
+
 
         }
 

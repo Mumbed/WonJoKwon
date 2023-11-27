@@ -1,42 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".LoginAcivity"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="20dp"
+    android:background="#FFFFFF"
+    android:gravity="center"> <!-- 가운데 정렬을 위해 android:gravity="center" 추가 -->
 
-
-
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="288dp"
+        android:layout_marginBottom="50dp"
+        app:srcCompat="@drawable/alpha" />
 
     <EditText
-
         android:id="@+id/emailArea"
         android:layout_width="match_parent"
-        android:layout_margin="20dp"
-        android:hint="email"
         android:layout_height="50dp"
-        />
+        android:layout_marginBottom="20dp"
+        android:hint="email"
+        android:drawableLeft="@drawable/ic_email"
+        android:padding="10dp"
+        android:background="@drawable/edittext_rounded" />
 
     <EditText
-
         android:id="@+id/passwordArea"
         android:layout_width="match_parent"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginBottom="20dp"
-        android:hint="password"
         android:layout_height="50dp"
-        />
-    <Button
-
-        android:id="@+id/loginBTN"
-        android:text="로그인"
-        android:layout_marginStart="30dp"
-        android:layout_marginEnd="30dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginBottom="30dp"
+        android:hint="password"
+        android:drawableLeft="@drawable/ic_lock"
         android:padding="10dp"
+        android:background="@drawable/edittext_rounded" />
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/loginBTN"
+            android:layout_width="0dp"
+            android:layout_height="96dp"
+            android:layout_weight="1"
+            android:layout_marginStart="50dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/login_btn"
+            android:text="LOGIN"
+            android:textColor="#FFFFFF" />
+
+        <Button
+            android:id="@+id/signupBTN"
+            android:layout_width="0dp"
+            android:layout_height="96dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="30dp"
+            android:layout_weight="1"
+            android:background="@drawable/sign_btn"
+            android:text="signup"
+            android:textColor="#FFFFFF" />
+    </LinearLayout>
 </LinearLayout>

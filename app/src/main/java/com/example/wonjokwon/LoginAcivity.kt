@@ -22,6 +22,7 @@ class LoginAcivity : AppCompatActivity() {
         val loginBTN=findViewById<Button>(R.id.loginBTN)
         val email = findViewById<TextView>(R.id.emailArea)
         val password = findViewById<TextView>(R.id.passwordArea)
+        val SignupBTN=findViewById<Button>(R.id.signupBTN)
 
 
         loginBTN.setOnClickListener{
@@ -36,6 +37,12 @@ class LoginAcivity : AppCompatActivity() {
 
                     }
                 }
+
+        }
+        SignupBTN.setOnClickListener{
+            val intent= Intent(this, JoinActivity::class.java)
+
+            startActivity(intent)
 
         }
     }
