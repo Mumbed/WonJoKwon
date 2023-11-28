@@ -84,6 +84,10 @@ class RvAdapter(val context: Context, private var items: List<Item>):
             //AlertDialog.Builder(context).setMessage("You clicked ${student.name}.").show()
             itemClickListener?.onItemClick(item.id)//키값으로 들어갈 아이디
         }
+        holder.view.findViewById<ImageView>(R.id.rvimageArea).setOnClickListener {
+            //AlertDialog.Builder(context).setMessage("You clicked ${student.name}.").show()
+            itemClickListener?.onItemClick(item.id)//키값으로 들어갈 아이디
+        }
     }
 
 

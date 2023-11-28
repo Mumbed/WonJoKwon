@@ -1,22 +1,18 @@
 package com.example.wonjokwon
 
+import android.content.ContentValues.TAG
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
+import android.util.Log
 import android.widget.Button
 import android.widget.Switch
-import android.widget.TextView
-import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
@@ -32,12 +28,25 @@ class MainActivity : AppCompatActivity(){
         setContentView(R.layout.activity_main)
         updateList()  // list items on recyclerview
 
+
         recyclerViewItems.layoutManager = LinearLayoutManager(this)
         adapter = RvAdapter(this, emptyList())
 
         recyclerViewItems.adapter = adapter
 
         updateList()  // list items on recyclerview
+
+        itemsCollectionRef.addSnapshotListener { snapshot, e ->
+            if (e != null) {
+                Log.w(TAG, "Listen failed.", e)
+                return@addSnapshotListener
+            }
+
+            if (snapshot != null && !snapshot.isEmpty) {
+                // 데이터가 변경되었을 때의 로직
+                updateList()
+            }
+        }
 
 
         adapter?.setOnItemClickListener {
