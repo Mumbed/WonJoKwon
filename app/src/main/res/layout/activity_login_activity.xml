@@ -42,5 +42,5 @@
         android:layout_marginTop="20dp"
         android:padding="16dp"
         android:textColor="#FFFFFF"
-        android:background="#2196F3"/>
+        android:background="@drawable/radius_button"/>
 </LinearLayout>

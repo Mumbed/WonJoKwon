@@ -51,7 +51,7 @@
         android:padding="10dp"
         android:layout_marginTop="20dp"
         android:textColor="#FFFFFF"
-        android:background="#2196F3"
+        android:background="@drawable/radius_button"
         android:text="저장"/>
     <Button
         android:id="@+id/buttondelet"
@@ -60,7 +60,7 @@
         android:padding="10dp"
         android:layout_marginTop="20dp"
         android:textColor="#FFFFFF"
-        android:background="#2196F3"
+        android:background="@drawable/radius_button"
         android:text="상품삭제하기"/>
 
     <CheckBox

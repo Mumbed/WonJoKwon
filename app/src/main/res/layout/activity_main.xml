@@ -57,6 +57,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="UseSwitchCompatOrMaterialXml" />
+    <!--android:background="@drawable/_bg__selected_true__state_enabled__icon_true_shape"-->
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

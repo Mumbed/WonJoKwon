@@ -46,20 +46,24 @@
     <Button
 
         android:id="@+id/buttonAddUpdate"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="20dp"
         android:text="Add/Update"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        android:textColor="#FFFFFF"
+        android:background="@drawable/radius_button"/>
     <Button
         android:id="@+id/buttonSelectImage"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Select Image"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Updatestory" />
+        app:layout_constraintTop_toBottomOf="@+id/Updatestory"
+        android:textColor="#FFFFFF"
+        android:background="@drawable/radius_button"/>
 
 
 
