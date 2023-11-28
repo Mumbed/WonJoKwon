@@ -26,6 +26,13 @@
 
 
 
+    <color name="blue">#007AFF</color>
+    <color name="green">#00FF00</color>
+    <color name="button_blue">#2196F3</color>
+
+
+
+
     <color name="_bg__switch_color">#FFFFFF</color>
     <color name="_bg__header_ek1_color">#E6E0E9</color>
     <color name="_bg__logo_ek1_color">#000000</color>

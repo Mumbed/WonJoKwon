@@ -2,34 +2,22 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="50dp">
+    android:padding="16dp">
 
     <!-- BottomSheetDialog에 표시할 내용 추가 -->
     <Button
-        android:text="상품 수정"
         android:id="@+id/ItemFix"
-        android:layout_margin="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:padding="16dp"
-        android:textColor="#FFFFFF"
-        android:background="@drawable/radius_button"
-         />
+        android:text="상품 수정" />
 
     <Button
-        android:text="판매자 에게 채팅"
         android:id="@+id/chattingToSeller"
-        android:layout_margin="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:padding="16dp"
-        android:textColor="#FFFFFF"
-        android:background="@drawable/radius_button"
-         />
+        android:text="판매자 에게 채팅" />
 
 
 

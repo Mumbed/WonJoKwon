@@ -28,7 +28,7 @@ class NewItemsUpdate : AppCompatActivity() {
     private val db: FirebaseFirestore = Firebase.firestore
     private val itemsCollectionRef = db.collection("items")
     private val usersInfoCollectionRef = db.collection("UsersInfo")
-    private val editPrice by lazy {findViewById<EditText>(R.id.editPrice)}
+    private val editPrice by lazy {findViewById<EditText>(R.id.editPrice2)}
     private val editItemName by lazy {findViewById<EditText>(R.id.editItemName)}
     private val ItemStory by lazy {findViewById<EditText>(R.id.Updatestory)}
 
@@ -50,6 +50,8 @@ class NewItemsUpdate : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_new_items_update)
+
+        overridePendingTransition(R.anim.from_down_enter, R.anim.none);
 
 
         findViewById<Button>(R.id.buttonSelectImage).setOnClickListener {
@@ -75,7 +77,13 @@ class NewItemsUpdate : AppCompatActivity() {
 
 
     }
+    override fun onBackPressed() {
+        super.onBackPressed();
 
+        if (isFinishing()) {
+            overridePendingTransition(R.anim.none, R.anim.to_down_exit);
+        }
+    }
 
     private fun updateUserInfoList(callback: (String) -> Unit) {
         val auth = Firebase.auth
@@ -162,18 +170,6 @@ class NewItemsUpdate : AppCompatActivity() {
     }
     companion object {
         private const val REQUEST_CODE_IMAGE_PICK = 1001
-
-//        val itemMap = hashMapOf(
-//            "uid" to uid,
-//            "name" to name,
-//            "story" to story,
-//            "price" to price,
-//            "status" to status
-//
-//        )
-//        itemsCollectionRef.document().set(itemMap)
-//        .addOnSuccessListener { updateList() }.addOnFailureListener {  }
-
     }
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
