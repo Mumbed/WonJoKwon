@@ -11,6 +11,7 @@ import android.widget.Switch
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -173,7 +174,16 @@ class MainActivity : AppCompatActivity(){
                 transaction.commit()
 
             }
-
+            R.id.home -> {
+                val fragment = supportFragmentManager.findFragmentById(R.id.fragment_container)
+                if (fragment != null) {
+                    val transaction = supportFragmentManager.beginTransaction()
+                    transaction.remove(fragment).commit()
+                }
+                // 메인 액티비티로 돌아가기
+                supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+                return@OnNavigationItemSelectedListener true
+            }
         }
 
 
