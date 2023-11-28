@@ -11,13 +11,19 @@
         android:id="@+id/ItemFix"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="상품 수정" />
+        android:text="상품 수정"
+        android:textColor="#FFFFFF"
+        android:background="@drawable/radius_button"
+        android:layout_marginTop="16dp"/>
 
     <Button
         android:id="@+id/chattingToSeller"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="판매자 에게 채팅" />
+        android:text="판매자 에게 채팅"
+        android:textColor="#FFFFFF"
+        android:background="@drawable/radius_button"
+        android:layout_marginTop="16dp"/>
 
 
 
