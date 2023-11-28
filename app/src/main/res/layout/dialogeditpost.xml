@@ -95,10 +95,9 @@
                 android:id="@+id/buttonSave"
                 android:layout_width="187dp"
                 android:layout_height="wrap_content"
-                android:background="@color/blue"
+                android:background="@drawable/radius_button"
                 android:text="저장"
-                android:textColor="@android:color/white"
-                android:layout_marginRight="10dp"/>
+                android:textColor="@android:color/white" />
 
         </androidx.cardview.widget.CardView>
 
@@ -112,10 +111,9 @@
                 android:id="@+id/buttondelet"
                 android:layout_width="187dp"
                 android:layout_height="wrap_content"
-                android:background="@color/blue"
+                android:background="@drawable/radius_button"
                 android:text="상품삭제하기"
-                android:textColor="@android:color/white"
-                android:layout_marginLeft="10dp"/>
+                android:textColor="@android:color/white" />
         </androidx.cardview.widget.CardView>
     </LinearLayout>
 
