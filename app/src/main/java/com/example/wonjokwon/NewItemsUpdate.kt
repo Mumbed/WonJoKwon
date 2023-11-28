@@ -28,7 +28,7 @@ class NewItemsUpdate : AppCompatActivity() {
     private val db: FirebaseFirestore = Firebase.firestore
     private val itemsCollectionRef = db.collection("items")
     private val usersInfoCollectionRef = db.collection("UsersInfo")
-    private val editPrice by lazy {findViewById<EditText>(R.id.editPrice)}
+    private val editPrice by lazy {findViewById<EditText>(R.id.editPrice2)}
     private val editItemName by lazy {findViewById<EditText>(R.id.editItemName)}
     private val ItemStory by lazy {findViewById<EditText>(R.id.Updatestory)}
 

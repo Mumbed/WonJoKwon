@@ -27,13 +27,12 @@ class MainActivity : AppCompatActivity(){
     private val db: FirebaseFirestore = Firebase.firestore
     private val itemsCollectionRef = db.collection("items")
     private val recyclerViewItems by lazy { findViewById<RecyclerView>(R.id.itemsRecyclerView) }
-
+    var isSaleFilterEnabled = true // 초기값 설정
 
     override fun onCreate(savedInstanceState: Bundle?){
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         updateList()  // list items on recyclerview
-
 
         recyclerViewItems.layoutManager = LinearLayoutManager(this)
         adapter = RvAdapter(this, emptyList())
@@ -69,59 +68,74 @@ class MainActivity : AppCompatActivity(){
         }
 
 //필터링 로직
-        val filterButton = findViewById<Switch>(R.id.filter)
 
-        filterButton.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) {
-                val status = "unselled"
-                itemsCollectionRef.whereEqualTo("status", status).get()
-                    .addOnSuccessListener { querySnapshot ->
-                        val items = mutableListOf<Item>()
-                        for (doc in querySnapshot) {
-                            items.add(Item(doc))
-                        }
-                        adapter?.updateList(items)
-                    }
-                    .addOnFailureListener { exception ->
-                        // 실패할 경우 처리
-                    }
-            } else {
-                // 스위치가 비활성화되면 모든 데이터를 가져와서 리사이클러뷰 업데이트
-                itemsCollectionRef.get()
-                    .addOnSuccessListener { querySnapshot ->
-                        val items = mutableListOf<Item>()
-                        for (doc in querySnapshot) {
-                            items.add(Item(doc))
-                        }
-                        adapter?.updateList(items)
-                    }
-                    .addOnFailureListener { exception ->
-                        // 실패할 경우 처리
-                    }
-            }
-        }
+
+//        fun loadDataWithFilter() {
+//            val status = if (isSaleFilterEnabled) "unselled" else "" // 상태에 따라 필터링 설정
+//            itemsCollectionRef.whereEqualTo("status", status).get()
+//                .addOnSuccessListener { querySnapshot ->
+//                    val items = mutableListOf<Item>()
+//                    for (doc in querySnapshot) {
+//                        items.add(Item(doc))
+//                    }
+//                    adapter?.updateList(items)
+//                }
+//                .addOnFailureListener { exception ->
+//                    // 실패할 경우 처리
+//                }
+//        }
 
 
 
-        val fab=findViewById<FloatingActionButton>(R.id.floatingActionButton)
-        fab.setOnClickListener{
+        val fab = findViewById<FloatingActionButton>(R.id.floatingActionButton)
+        fab.setOnClickListener {
             val bottomSheetDialog = BottomSheetDialog(this)
             val view = layoutInflater.inflate(R.layout.bottom_sheet_layout, null)
 
             // BottomSheetDialog에 표시할 내용을 설정
             // 여기에 여러 메뉴나 내용을 추가하면 됩니다.
             val btnMenuItem1 = view.findViewById<Button>(R.id.newItemUpdate)
-            bottomSheetDialog.setContentView(view)
-            bottomSheetDialog.show()
+            val filterButton = view.findViewById<Switch>(R.id.filter)
 
             btnMenuItem1.setOnClickListener {
-                val intent= Intent(this, NewItemsUpdate::class.java)
+                val intent = Intent(this, NewItemsUpdate::class.java)
                 startActivity(intent)
-
             }
 
+            filterButton.setOnCheckedChangeListener { _, isChecked ->
+                if (isChecked) {
+                    val status = "unselled"
+                    itemsCollectionRef.whereEqualTo("status", status).get()
+                        .addOnSuccessListener { querySnapshot ->
+                            val items = mutableListOf<Item>()
+                            for (doc in querySnapshot) {
+                                items.add(Item(doc))
+                            }
+                            adapter?.updateList(items)
+                        }
+                        .addOnFailureListener { exception ->
+                            // 실패할 경우 처리
+                        }
+                } else {
+                    // 스위치가 비활성화되면 모든 데이터를 가져와서 리사이클러뷰 업데이트
+                    itemsCollectionRef.get()
+                        .addOnSuccessListener { querySnapshot ->
+                            val items = mutableListOf<Item>()
+                            for (doc in querySnapshot) {
+                                items.add(Item(doc))
+                            }
+                            adapter?.updateList(items)
+                        }
+                        .addOnFailureListener { exception ->
+                            // 실패할 경우 처리
+                        }
+                }
+            }
 
+            bottomSheetDialog.setContentView(view)
+            bottomSheetDialog.show()
         }
+
 
 
 
@@ -141,7 +155,6 @@ class MainActivity : AppCompatActivity(){
                 val intent= Intent( this, MsgActivity::class.java)
                 startActivity(intent)
 
-
             }
             R.id.mypage->{
                 val fragment = MypageFragment()
@@ -160,11 +173,6 @@ class MainActivity : AppCompatActivity(){
                 transaction.commit()
 
             }
-
-
-
-
-
 
         }
 

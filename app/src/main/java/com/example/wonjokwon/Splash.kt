@@ -18,8 +18,6 @@ class Splash : AppCompatActivity() {
         setContentView(R.layout.activity_splash)
         auth = Firebase.auth
 
-
-
         if(auth.currentUser?.uid==null){
             Handler().postDelayed({
 
