@@ -58,6 +58,9 @@
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
             android:text="logout"
+            android:textSize="20sp"
+            android:textColor="#FFFFFF"
+            android:background="@drawable/radius_button"/>
             android:textSize="20sp" />
     </androidx.cardview.widget.CardView>
 

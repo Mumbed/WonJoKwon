@@ -58,9 +58,6 @@ class MsgRvAdapter(val context: Context, private var items: List<MsgItem>):
            holder.view.findViewById<TextView>(R.id.msgtext).text = item.msg
        }
 
-
-
-
     }
 
 
@@ -68,4 +65,3 @@ class MsgRvAdapter(val context: Context, private var items: List<MsgItem>):
         return items.size
     }
 }
-

@@ -63,9 +63,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
-                android:background="@color/blue"
+                android:background="@drawable/radius_button"
                 android:text="logout"
-
+                android:textColor="#FFFFFF"
+                android:background="@color/blue"
                 android:textSize="20sp" />
         </androidx.cardview.widget.CardView>
 

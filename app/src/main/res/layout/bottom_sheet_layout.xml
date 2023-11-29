@@ -12,7 +12,10 @@
         android:id="@+id/newItemUpdate"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="새로운 상품 등록" />
+        android:text="새로운 상품 등록"
+        android:textColor="#FFFFFF"
+        android:background="@drawable/radius_button"
+        />
 
     <Switch
         android:id="@+id/filter"

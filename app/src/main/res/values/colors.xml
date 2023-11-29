@@ -1,13 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+<!--    <color name="black">#FF000000</color>-->
+<!--    <color name="white">#FFFFFFFF</color>-->
+<!--    <color name="purple_200">#FFBB86FC</color>-->
+<!--    <color name="purple_500">#FF6200EE</color>-->
+<!--    <color name="purple_700">#FF3700B3</color>-->
+<!--    <color name="teal_200">#FF03DAC5</color>-->
+<!--    <color name="teal_700">#FF018786</color>-->
+
+    <!-- switch colors -->
+
+    <color name="colorPrimary">#008577</color>
+    <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorAccent">#D81B60</color>
     <color name="purple_200">#FFBB86FC</color>
     <color name="purple_500">#FF6200EE</color>
     <color name="purple_700">#FF3700B3</color>
     <color name="teal_200">#FF03DAC5</color>
     <color name="teal_700">#FF018786</color>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <color name="royal_blue">#4169E1</color>
+    <color name="doger_blue">#1E90FF</color>
+
+
+
     <color name="blue">#007AFF</color>
     <color name="green">#00FF00</color>
     <color name="button_blue">#2196F3</color>
+
+
+
+
+    <color name="_bg__switch_color">#FFFFFF</color>
+    <color name="_bg__header_ek1_color">#E6E0E9</color>
+    <color name="_bg__logo_ek1_color">#000000</color>
+    <color name="link_color">#6750A4</color>
+    <color name="_bg__light_scheme_ek1_color">#FEF7FF</color>
+    <color name="container_color">#ffffff</color>
+    <color name="_bg__handle_shape_ek3_color">#EADDFF</color>
+    <color name="_bg__selected_true__state_disabled__icon_false_color">#1D1B20</color>
+    <color name="_bg__handle_shape_ek21_color">#79747E</color>
+    <color name="_bg__handle_shape_ek23_color">#49454F</color>
+    <color name="_bg__selected_false__state_disabled__icon_false_color">#E7E0EC</color>
+    <color name="_bg__dark_scheme_ek1_color">#141218</color>
+    <color name="_bg__selected_true__state_enabled__icon_false_1_color">#D0BCFF</color>
+    <color name="_bg__handle_shape_ek41_color">#381E72</color>
+    <color name="_bg__handle_shape_ek43_color">#4F378B</color>
+    <color name="_bg__selected_false__state_enabled__icon_false_1_color">#36343B</color>
+    <color name="_bg__handle_shape_ek61_color">#938F99</color>
+    <color name="_bg__handle_shape_ek63_color">#CAC4D0</color>
+ 
 </resources>

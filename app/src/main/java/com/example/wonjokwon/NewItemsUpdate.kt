@@ -52,6 +52,11 @@ class NewItemsUpdate : AppCompatActivity() {
         setContentView(R.layout.activity_new_items_update)
 
 
+        //아래에서 위로 올라옴
+        overridePendingTransition(R.anim.from_down_enter, R.anim.none);
+
+
+
         findViewById<Button>(R.id.buttonSelectImage).setOnClickListener {
             val intent = Intent(Intent.ACTION_PICK)
             intent.type = "image/*"
@@ -74,6 +79,15 @@ class NewItemsUpdate : AppCompatActivity() {
         }
 
 
+    }
+
+    //뒤로가기 버튼 누르면 위에서 아래로 내려감
+    override fun onBackPressed() {
+        super.onBackPressed();
+
+        if (isFinishing()) {
+            overridePendingTransition(R.anim.none, R.anim.to_down_exit);
+        }
     }
 
 

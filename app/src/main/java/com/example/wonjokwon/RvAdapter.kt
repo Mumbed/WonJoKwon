@@ -93,4 +93,3 @@ class RvAdapter(val context: Context, private var items: List<Item>):
         return items.size
     }
 }
-
