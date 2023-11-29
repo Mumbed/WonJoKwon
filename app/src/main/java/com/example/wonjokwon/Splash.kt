@@ -7,11 +7,36 @@ import android.os.Handler
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
 class Splash : AppCompatActivity() {
 
     private lateinit var auth: FirebaseAuth
+    private val db: FirebaseFirestore = Firebase.firestore
+
+    private val usersInfoCollectionRef = db.collection("UsersInfo")
+    private fun updateUserInfoList(callback: (String) -> Unit) {
+        val auth = Firebase.auth
+        val userEmail = auth.currentUser?.email?.substringBefore('@') ?: ""
+
+        usersInfoCollectionRef.get().addOnSuccessListener { querySnapshot ->
+            var name = ""
+
+            for (doc in querySnapshot) {
+                val uid = doc.getString("uid")
+
+                if (userEmail == uid) {
+                    name = doc.getString("name") ?: ""
+                    break
+                }
+            }
+
+            callback(name)
+
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,11 +54,12 @@ class Splash : AppCompatActivity() {
 
         }
         else{
-            val name=auth.currentUser!!.email.toString()
-            name.substringAfter("@")
             Handler().postDelayed({
-            startActivity(Intent(this, MainActivity::class.java))
-                Toast.makeText(this, "안녕하세요$name", Toast.LENGTH_SHORT).show()
+                updateUserInfoList { name ->
+
+                    startActivity(Intent(this, MainActivity::class.java))
+                    Toast.makeText(this, "안녕하세요!! $name 님 !!", Toast.LENGTH_SHORT).show()
+                }
 
             },3000)
 
