@@ -62,6 +62,10 @@ class RvAdapter(val context: Context, private var items: List<Item>):
         //holder.view.findViewById<ImageView>(R.id.rvimageArea). = item.id
         holder.view.findViewById<TextView>(R.id.rvTextArea).text = item.name
         holder.view.findViewById<TextView>(R.id.rvTextArea2).text = item.price.toString()
+        holder.view.findViewById<ImageView>(R.id.rvimageArea).setOnClickListener {
+            //AlertDialog.Builder(context).setMessage("You clicked ${student.name}.").show()
+            itemClickListener?.onItemClick(item.id)//키값으로 들어갈 아이디
+        }
         if(item.status.equals("unselled")){
             holder.view.findViewById<TextView>(R.id.rvTextArea3).text="판매중"
         }
