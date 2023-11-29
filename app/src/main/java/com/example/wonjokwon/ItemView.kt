@@ -118,7 +118,7 @@ class ItemView : Fragment() {
                     }
                 }
                 title?.setText("상품명 : "+it["name"].toString())
-                price?.setText("가격 : "+it["price"].toString())
+                price?.setText("가격 : "+it["price"].toString()+"원")
                 story?.setText("상품설명 : "+it["story"].toString())
 
                 if(it["status"].toString().equals("selled")){
@@ -231,11 +231,10 @@ class ItemView : Fragment() {
                             updateList()
 
                             dialog.dismiss()
+                            val intent= Intent(requireActivity(), MainActivity::class.java)
+                            Toast.makeText(context," 삭제되었습니다. ", Toast.LENGTH_SHORT).show()
+                            startActivity(intent)
                         }
-
-                        dialog.show()
-
-
                     }
                     else{
                         Toast.makeText(context,"판매자만 수정가능합니다.", Toast.LENGTH_SHORT).show()

@@ -50,6 +50,7 @@ class NewItemsUpdate : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_new_items_update)
+        auth = Firebase.auth // Initialize auth here
 
 
         //아래에서 위로 올라옴
@@ -65,15 +66,18 @@ class NewItemsUpdate : AppCompatActivity() {
 
 
         findViewById<Button>(R.id.buttonAddUpdate).setOnClickListener {
-            selectedImageUri?.let { uri ->
+            if (selectedImageUri != null) {
                 updateUserInfoList { name ->
-                    addItem(name, uri)
+                    addItem(name, selectedImageUri!!)
                     updateList()
                 }
-            } ?: run {
-                Toast.makeText(this, "Please select an image", Toast.LENGTH_SHORT).show()
+            } else {
+                // 이미지가 선택되지 않은 경우
+                updateUserInfoList { name ->
+                    addItem(name, null) // 이미지를 선택하지 않음을 나타내기 위해 null 전달
+                    updateList()
+                }
             }
-            updateList()
             val intent= Intent(this, MainActivity::class.java)
             startActivity(intent)
         }
@@ -127,51 +131,66 @@ class NewItemsUpdate : AppCompatActivity() {
             selectedImageUri = data?.data
         }
     }
-    private fun addItem(UserName :String,imageUri: Uri) {
-        auth = Firebase.auth
+    private fun addItem(UserName: String, imageUri: Uri?) {
+        // 이미지가 선택되지 않은 경우 imageUri는 null
+        val imageUrl = imageUri?.let { uri ->
+            val imageRef = Firebase.storage.reference.child("itemImages/${uri.lastPathSegment}")
+            val uploadTask = imageRef.putFile(uri)
 
-        val username = UserName
-        val uid = auth.currentUser?.email?.substringBefore('@') ?: ""
+            uploadTask.continueWithTask { task ->
+                if (!task.isSuccessful) {
+                    task.exception?.let { throw it }
+                }
+                imageRef.downloadUrl
+            }.addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    task.result?.let { downloadUrl ->
+                        // Firestore에 아이템 정보와 이미지 URL 저장
+                        val username = UserName
+                        val uid = auth.currentUser?.email?.substringBefore('@') ?: ""
+                        val name = editItemName.text.toString()
+                        val story = ItemStory.text.toString()
+                        val price = editPrice.text.toString().toInt()
+                        val status = "unselled"
 
-        val name = editItemName.text.toString()
-        val story = ItemStory.text.toString()
-        val price = editPrice.text.toString().toInt()
-
-        val imageRef = Firebase.storage.reference.child("itemImages/${imageUri.lastPathSegment}")
-        val uploadTask = imageRef.putFile(imageUri)
-
-        val status = "unselled"
-        if (name.isEmpty()) {
-            Snackbar.make(editItemName, "Input name!", Snackbar.LENGTH_SHORT).show()
-            return
-        }
-        if (story.isEmpty()) {
-            Snackbar.make(editItemName, "Input story!", Snackbar.LENGTH_SHORT).show()
-            return
-        }
-
-        uploadTask.continueWithTask { task ->
-            if (!task.isSuccessful) {
-                task.exception?.let { throw it }
+                        val itemMap = hashMapOf(
+                            "uid" to uid,
+                            "username" to username,
+                            "name" to name,
+                            "story" to story,
+                            "price" to price,
+                            "status" to status,
+                            "imageUrl" to downloadUrl.toString() // 이미지 URL 추가
+                        )
+                        itemsCollectionRef.document().set(itemMap)
+                            .addOnSuccessListener { updateList() }
+                            .addOnFailureListener { /* 오류 처리 */ }
+                    }
+                }
             }
-            imageRef.downloadUrl
-        }.addOnCompleteListener { task ->
-            if (task.isSuccessful) {
-                val downloadUrl = task.result.toString()
+        }
 
-                // Firestore에 아이템 정보와 이미지 URL 저장
-                val itemMap = hashMapOf(
-                    "uid" to uid,
-                    "username" to username,
-                    "name" to name,
-                    "story" to story,
-                    "price" to price,
-                    "status" to status,
-                    "imageUrl" to downloadUrl  // 이미지 URL 추가
-                )
-                itemsCollectionRef.document().set(itemMap)
-                    .addOnSuccessListener { updateList() }.addOnFailureListener { /* 오류 처리 */ }
-            }
+        // 이미지가 선택되지 않은 경우
+        if (imageUri == null) {
+            // Firestore에 아이템 정보만 저장
+            val username = UserName
+            val uid = auth.currentUser?.email?.substringBefore('@') ?: ""
+            val name = editItemName.text.toString()
+            val story = ItemStory.text.toString()
+            val price = editPrice.text.toString().toInt()
+            val status = "unselled"
+
+            val itemMap = hashMapOf(
+                "uid" to uid,
+                "username" to username,
+                "name" to name,
+                "story" to story,
+                "price" to price,
+                "status" to status
+            )
+            itemsCollectionRef.document().set(itemMap)
+                .addOnSuccessListener { updateList() }
+                .addOnFailureListener { /* 오류 처리 */ }
         }
     }
     companion object {

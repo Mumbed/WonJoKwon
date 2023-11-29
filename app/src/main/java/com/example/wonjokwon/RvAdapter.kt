@@ -61,7 +61,7 @@ class RvAdapter(val context: Context, private var items: List<Item>):
         Glide.with(context).load(item.imageUrl).into(imageView)
         //holder.view.findViewById<ImageView>(R.id.rvimageArea). = item.id
         holder.view.findViewById<TextView>(R.id.rvTextArea).text = item.name
-        holder.view.findViewById<TextView>(R.id.rvTextArea2).text = item.price.toString()
+        holder.view.findViewById<TextView>(R.id.rvTextArea2).text = item.price.toString()+"원"
         holder.view.findViewById<ImageView>(R.id.rvimageArea).setOnClickListener {
             //AlertDialog.Builder(context).setMessage("You clicked ${student.name}.").show()
             itemClickListener?.onItemClick(item.id)//키값으로 들어갈 아이디
