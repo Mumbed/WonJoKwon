@@ -162,8 +162,6 @@ class ItemView : Fragment() {
                     // 이곳에서 name을 사용하거나 처리할 작업을 수행
 
                     println("User name: $name")
-
-
                     if (userEmail == uid) {
                         Toast.makeText(context, "판매글을 수정해보세요!!.", Toast.LENGTH_SHORT).show()
                         val builder = AlertDialog.Builder(context)
@@ -235,7 +233,12 @@ class ItemView : Fragment() {
                             Toast.makeText(context," 삭제되었습니다. ", Toast.LENGTH_SHORT).show()
                             startActivity(intent)
                         }
+
+                        dialog.show()
+
+
                     }
+
                     else{
                         Toast.makeText(context,"판매자만 수정가능합니다.", Toast.LENGTH_SHORT).show()
                     }
