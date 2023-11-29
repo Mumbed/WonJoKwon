@@ -162,6 +162,8 @@ class ItemView : Fragment() {
                     // 이곳에서 name을 사용하거나 처리할 작업을 수행
 
                     println("User name: $name")
+
+
                     if (userEmail == uid) {
                         Toast.makeText(context, "판매글을 수정해보세요!!.", Toast.LENGTH_SHORT).show()
                         val builder = AlertDialog.Builder(context)
@@ -176,7 +178,7 @@ class ItemView : Fragment() {
                         val buttondelet = inflater.findViewById<Button>(R.id.buttondelet)
                         val status = inflater.findViewById<CheckBox>(R.id.status)
                         editTitle.setText(title.text.toString().substringAfter(": "))
-                        editPrice.setText(price.text.toString().substringAfter(": "))
+                        editPrice.setText(price.text.toString().substringAfter(": ").substringBefore("원"))
                         editStory.setText(story.text.toString().substringAfter(": "))
 
                         status.isChecked = statustext.text.toString() != "판매중"
@@ -238,7 +240,6 @@ class ItemView : Fragment() {
 
 
                     }
-
                     else{
                         Toast.makeText(context,"판매자만 수정가능합니다.", Toast.LENGTH_SHORT).show()
                     }
