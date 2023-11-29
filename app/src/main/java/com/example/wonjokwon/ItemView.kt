@@ -257,6 +257,7 @@ class ItemView : Fragment() {
 
                 sendBtn.setOnClickListener {
                     addItem(uid,titlename,msg.text.toString())
+
                 }
                 dialog2.dismiss()
                 dialog2.show()

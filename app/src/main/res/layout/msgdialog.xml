@@ -18,11 +18,13 @@
 
     <EditText
         android:id="@+id/msgText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="text"
+        android:layout_width="394dp"
+        android:layout_height="177dp"
         android:layout_margin="10dp"
-        android:hint="send msg"/>
+        android:hint="send msg"
+        android:maxLines="5"
+        android:minLines="1"
+        android:inputType="textMultiLine" />
 
     <Button
         android:layout_margin="10dp"

@@ -1,12 +1,14 @@
 package com.example.wonjokwon
 
 import android.content.ContentValues.TAG
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Button
+import android.widget.CompoundButton
 import android.widget.Switch
 import android.widget.TextView
 import android.widget.Toast
@@ -89,49 +91,100 @@ class MainActivity : AppCompatActivity(){
 
 
         val fab = findViewById<FloatingActionButton>(R.id.floatingActionButton)
+
         fab.setOnClickListener {
             val bottomSheetDialog = BottomSheetDialog(this)
+
             val view = layoutInflater.inflate(R.layout.bottom_sheet_layout, null)
+            val filterButton1 = view.findViewById<Switch>(R.id.filter1)
+            val filterButton3 = view.findViewById<Switch>(R.id.filter3)
+
+            val sharedPreferences1 = getSharedPreferences("SwitchState1", Context.MODE_PRIVATE)
+            filterButton1.isChecked = sharedPreferences1.getBoolean("filter1State", false)
+
+            val sharedPreferences3 = getSharedPreferences("SwitchState3", Context.MODE_PRIVATE)
+            filterButton3.isChecked = sharedPreferences3.getBoolean("filter3State", false)
 
             // BottomSheetDialog에 표시할 내용을 설정
             // 여기에 여러 메뉴나 내용을 추가하면 됩니다.
             val btnMenuItem1 = view.findViewById<Button>(R.id.newItemUpdate)
-            val filterButton = view.findViewById<Switch>(R.id.filter)
-
             btnMenuItem1.setOnClickListener {
                 val intent = Intent(this, NewItemsUpdate::class.java)
                 startActivity(intent)
             }
+            val switchListener = CompoundButton.OnCheckedChangeListener { buttonView, isChecked ->
+                when (buttonView) {
+                    filterButton1 -> {
+                        sharedPreferences1.edit().putBoolean("filter1State", isChecked).apply()
 
-            filterButton.setOnCheckedChangeListener { _, isChecked ->
-                if (isChecked) {
-                    val status = "unselled"
-                    itemsCollectionRef.whereEqualTo("status", status).get()
-                        .addOnSuccessListener { querySnapshot ->
-                            val items = mutableListOf<Item>()
-                            for (doc in querySnapshot) {
-                                items.add(Item(doc))
-                            }
-                            adapter?.updateList(items)
+                        if (isChecked) {
+                            filterButton3.isChecked = false  // filterButton3 언체크
+
+                            val status = "unselled"
+                            itemsCollectionRef.whereEqualTo("status", status).get()
+                                .addOnSuccessListener { querySnapshot ->
+                                    val items = mutableListOf<Item>()
+                                    for (doc in querySnapshot) {
+                                        items.add(Item(doc))
+                                    }
+                                    adapter?.updateList(items)
+                                }
+                                .addOnFailureListener { exception ->
+                                    // 실패할 경우 처리
+                                }
+                        } else {
+                            // 스위치가 비활성화되면 모든 데이터를 가져와서 리사이클러뷰 업데이트
+                            itemsCollectionRef.get()
+                                .addOnSuccessListener { querySnapshot ->
+                                    val items = mutableListOf<Item>()
+                                    for (doc in querySnapshot) {
+                                        items.add(Item(doc))
+                                    }
+                                    adapter?.updateList(items)
+                                }
+                                .addOnFailureListener { exception ->
+                                    // 실패할 경우 처리
+                                }
                         }
-                        .addOnFailureListener { exception ->
-                            // 실패할 경우 처리
+                    }
+
+                    filterButton3 -> {
+                        sharedPreferences3.edit().putBoolean("filter3State", isChecked).apply()
+
+                        if (isChecked) {
+                            filterButton1.isChecked = false  // filterButton3 언체크
+
+                            val status = "selled"
+                            itemsCollectionRef.whereEqualTo("status", status).get()
+                                .addOnSuccessListener { querySnapshot ->
+                                    val items = mutableListOf<Item>()
+                                    for (doc in querySnapshot) {
+                                        items.add(Item(doc))
+                                    }
+                                    adapter?.updateList(items)
+                                }
+                                .addOnFailureListener { exception ->
+                                    // 실패할 경우 처리
+                                }
+                        } else {
+                            // 스위치가 비활성화되면 모든 데이터를 가져와서 리사이클러뷰 업데이트
+                            itemsCollectionRef.get()
+                                .addOnSuccessListener { querySnapshot ->
+                                    val items = mutableListOf<Item>()
+                                    for (doc in querySnapshot) {
+                                        items.add(Item(doc))
+                                    }
+                                    adapter?.updateList(items)
+                                }
+                                .addOnFailureListener { exception ->
+                                    // 실패할 경우 처리
+                                }
                         }
-                } else {
-                    // 스위치가 비활성화되면 모든 데이터를 가져와서 리사이클러뷰 업데이트
-                    itemsCollectionRef.get()
-                        .addOnSuccessListener { querySnapshot ->
-                            val items = mutableListOf<Item>()
-                            for (doc in querySnapshot) {
-                                items.add(Item(doc))
-                            }
-                            adapter?.updateList(items)
-                        }
-                        .addOnFailureListener { exception ->
-                            // 실패할 경우 처리
-                        }
+                    }
                 }
             }
+            filterButton1.setOnCheckedChangeListener(switchListener)
+            filterButton3.setOnCheckedChangeListener(switchListener)
 
             bottomSheetDialog.setContentView(view)
             bottomSheetDialog.show()
