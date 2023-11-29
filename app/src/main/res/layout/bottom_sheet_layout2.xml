@@ -24,9 +24,7 @@
         android:textColor="#FFFFFF"
         android:background="@drawable/radius_button"
         android:layout_marginTop="16dp"/>
-
-
-
+        android:text="판매자 에게 채팅" />
     <!-- 추가적인 메뉴나 내용을 원하는만큼 추가 -->
 
 </LinearLayout>

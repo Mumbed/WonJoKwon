@@ -53,13 +53,10 @@ class MsgRvAdapter(val context: Context, private var items: List<MsgItem>):
         auth = Firebase.auth
 
         val userEmail = auth.currentUser!!.getEmail().toString().substringBefore('@')
-        if(item.receiverName==userEmail) {
-            holder.view.findViewById<TextView>(R.id.sender).text = item.itemName +"상품 에대한 "+item.name+"님의 메세지 :"
-            holder.view.findViewById<TextView>(R.id.msgtext).text = item.msg
-        }
-
-
-
+       if(item.receiverName==userEmail) {
+           holder.view.findViewById<TextView>(R.id.sender).text = item.itemName +"상품 에대한 "+item.name+"님의 메세지 :"
+           holder.view.findViewById<TextView>(R.id.msgtext).text = item.msg
+       }
 
     }
 

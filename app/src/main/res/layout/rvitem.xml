@@ -16,6 +16,7 @@
         />
 
 
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -42,7 +43,8 @@
             android:text="text"
             android:layout_margin="10dp"
 
-            /> <TextView
+            />
+      <TextView
         android:id="@+id/rvTextArea3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -50,8 +52,7 @@
         android:singleLine="true"
         android:text="text"
         android:layout_margin="10dp"
-
-        /></LinearLayout>
+/>
 
 
 

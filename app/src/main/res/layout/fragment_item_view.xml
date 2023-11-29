@@ -29,6 +29,12 @@
             android:textSize="30dp"
             android:textStyle="bold"
             android:text="title" />
+        android:id="@+id/ItemTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:textSize="30dp"
+        android:textStyle="bold"
+        android:text="title" />
         <TextView
             android:id="@+id/ItemPrice"
             android:layout_width="wrap_content"

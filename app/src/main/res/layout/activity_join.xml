@@ -51,6 +51,7 @@
         android:layout_marginTop="30dp"
         android:text=" 회원가입"
         android:background="@drawable/radius_button"
+        android:background="@color/teal_700"
         android:textColor="#FFFFFF" />
 
     <!-- 이미 회원인 경우 버튼 -->

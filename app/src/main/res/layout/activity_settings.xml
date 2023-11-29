@@ -61,6 +61,7 @@
             android:textSize="20sp"
             android:textColor="#FFFFFF"
             android:background="@drawable/radius_button"/>
+            android:textSize="20sp" />
     </androidx.cardview.widget.CardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

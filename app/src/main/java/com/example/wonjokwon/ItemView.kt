@@ -14,9 +14,9 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
-//import androidx.navigation.Navigation
-//import androidx.navigation.findNavController
-//import androidx.navigation.fragment.findNavController
+import androidx.navigation.Navigation
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -93,7 +93,6 @@ class ItemView : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
         // Inflate the layout for this fragment
         val view=inflater.inflate(R.layout.fragment_item_view, container, false)
         val title=view.findViewById<TextView>(R.id.ItemTitle)
