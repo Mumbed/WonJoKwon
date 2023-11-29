@@ -17,12 +17,13 @@ import java.util.Date
 import java.util.Locale
 
 
-data class MsgItem(val id: String, val name: String,val msg:String,val receiverName:String,val itemName:String) {
+data class MsgItem(val id: String, val name: String,val msg:String,val receiverName:String,val itemName:String,val reply:String) {
     constructor(doc: QueryDocumentSnapshot) :
-            this(doc.id, doc["name"].toString(), doc["msg"].toString(), doc["receiverName"].toString(), doc["itemName"].toString())
+            this(doc.id, doc["name"].toString(), doc["msg"].toString(), doc["receiverName"].toString(), doc["itemName"].toString(), doc["reply"].toString())
     constructor(key: String, map: Map<*, *>) :
-            this(key, map["name"].toString(), map["msg"].toString(), map["receiverName"].toString(), map["itemName"].toString())
+            this(key, map["name"].toString(), map["msg"].toString(), map["receiverName"].toString(), map["itemName"].toString(), map["reply"].toString())
 }
+
 class MyMsgViewHolder(val view: View) : RecyclerView.ViewHolder(view)
 
 class MsgRvAdapter(val context: Context, private var items: List<MsgItem>):
@@ -53,10 +54,29 @@ class MsgRvAdapter(val context: Context, private var items: List<MsgItem>):
         auth = Firebase.auth
 
         val userEmail = auth.currentUser!!.getEmail().toString().substringBefore('@')
-       if(item.receiverName==userEmail) {
-           holder.view.findViewById<TextView>(R.id.sender).text = item.itemName +"상품 에대한 "+item.name+"님의 메세지 :"
-           holder.view.findViewById<TextView>(R.id.msgtext).text = item.msg
-       }
+        if(item.receiverName==userEmail) {
+            holder.view.findViewById<TextView>(R.id.msgtext).text = item.msg
+            if(item.reply=="reply"){
+                holder.view.findViewById<TextView>(R.id.sender).text = item.itemName +"상품 에대한 "+item.name+"님의 답장 :"
+
+            }
+            else{
+                holder.view.findViewById<TextView>(R.id.sender).text = item.itemName +"상품 에대한 "+item.name+"님의 메세지 :"
+
+            }
+
+            holder.view.findViewById<TextView>(R.id.sender).setOnClickListener{
+                itemClickListener?.onItemClick(item.id)//키값으로 들어갈 아이디
+
+            }
+            holder.view.findViewById<TextView>(R.id.msgtext).setOnClickListener{
+                itemClickListener?.onItemClick(item.id)//키값으로 들어갈 아이디
+
+            }
+        }
+
+
+
 
     }
 
@@ -65,3 +85,4 @@ class MsgRvAdapter(val context: Context, private var items: List<MsgItem>):
         return items.size
     }
 }
+

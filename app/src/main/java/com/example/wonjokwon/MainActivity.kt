@@ -245,23 +245,27 @@ class MainActivity : AppCompatActivity(){
 
     override fun onResume() {
         super.onResume()
+
         updateList()
     }
 
     override fun onBackPressed() {
         super.onBackPressed()
+
         updateList()
 
     }
 
     override fun onStart() {
         super.onStart()
+
         updateList()
 
     }
 
     override fun onStop() {
         super.onStop()
+
         updateList()
     }
     private fun updateList() {

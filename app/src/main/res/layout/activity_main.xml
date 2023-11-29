@@ -23,11 +23,13 @@
         android:layout_height="54dp"
         android:layout_marginEnd="20dp"
         android:layout_marginBottom="20dp"
+        app:backgroundTint="@color/blue"
         android:clickable="true"
         app:layout_constraintBottom_toTopOf="@+id/bottomMenu"
         app:layout_constraintEnd_toEndOf="parent"
+        android:src="@drawable/baseline_upload_24" />
 
-         />
+    />
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragment_container"
@@ -35,7 +37,8 @@
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@+id/bottomMenu"
         app:layout_constraintTop_toBottomOf="@+id/filter"
-        tools:layout_editor_absoluteX="0dp" />
+        tools:layout_editor_absoluteX="0dp"
+        />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomMenu"

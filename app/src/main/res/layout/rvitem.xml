@@ -28,7 +28,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:singleLine="true"
-            android:textSize="20dp"
+            android:textSize="25dp"
+            android:textStyle="bold"
             android:text="text"
             android:layout_margin="10dp"
             />
@@ -38,7 +39,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:singleLine="true"
-            android:textSize="25dp"
+            android:textSize="20dp"
             android:textStyle="bold"
             android:text="text"
             android:layout_margin="10dp"
@@ -51,7 +52,8 @@
         android:layout_gravity="center"
         android:singleLine="true"
         android:text="text"
-        android:layout_margin="10dp"
+          android:textStyle="bold"
+          android:layout_margin="20dp"
 />
 
 
