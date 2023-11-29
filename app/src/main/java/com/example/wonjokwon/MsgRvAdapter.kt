@@ -57,11 +57,11 @@ class MsgRvAdapter(val context: Context, private var items: List<MsgItem>):
         if(item.receiverName==userEmail) {
             holder.view.findViewById<TextView>(R.id.msgtext).text = item.msg
             if(item.reply=="reply"){
-                holder.view.findViewById<TextView>(R.id.sender).text = item.itemName +"상품 에대한 "+item.name+"님의 답장 :"
+                holder.view.findViewById<TextView>(R.id.sender).text = "<" + item.itemName + ">" +" 상품에 대한 "+item.name+"님의 답장 :"
 
             }
             else{
-                holder.view.findViewById<TextView>(R.id.sender).text = item.itemName +"상품 에대한 "+item.name+"님의 메세지 :"
+                holder.view.findViewById<TextView>(R.id.sender).text = "<" + item.itemName + ">" +" 상품에 대한 "+item.name+"님의 메세지 :"
 
             }
 
@@ -85,4 +85,3 @@ class MsgRvAdapter(val context: Context, private var items: List<MsgItem>):
         return items.size
     }
 }
-
