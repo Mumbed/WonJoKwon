@@ -26,7 +26,8 @@
         android:clickable="true"
         app:layout_constraintBottom_toTopOf="@+id/bottomMenu"
         app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@drawable/bbang" />
+
+         />
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragment_container"
