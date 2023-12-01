@@ -40,7 +40,7 @@ class JoinActivity : AppCompatActivity() {
             auth.createUserWithEmailAndPassword(email.text.toString(), password.text.toString())
                 .addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {
-                        val intent= Intent(this, LoginAcivity::class.java)
+                        val intent= Intent(this, MainActivity::class.java)
                         addItem(nameText.text.toString(),birthText.text.toString())
 
                         Toast.makeText(this," 회원가입 성공 ", Toast.LENGTH_SHORT).show()

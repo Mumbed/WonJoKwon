@@ -93,7 +93,7 @@
 
             <Button
                 android:id="@+id/buttonSave"
-                android:layout_width="187dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/radius_button"
                 android:text="저장"
@@ -109,7 +109,7 @@
 
             <Button
                 android:id="@+id/buttondelet"
-                android:layout_width="187dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/radius_button"
                 android:text="상품삭제하기"
