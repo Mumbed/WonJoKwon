@@ -2,7 +2,6 @@
 
 중고 거래 어플리케이션
 
-<img src="https://img.shields.io/badge/Kotlin-F48E00?style=flat&logo=Kotlin&logoColor=white"/> <img src="https://img.shields.io/badge/Firebase-FFCA28?style=flat&logo=Firebase&logoColor=white"/>
 
 <br>
 
@@ -23,9 +22,17 @@
 
 ### ⚙️ 개발 환경
 
-- Android Studio
-- Firebase
+<img src="https://img.shields.io/badge/Kotlin-F48E00?style=flat&logo=Kotlin&logoColor=white"/> 
+<img src="https://img.shields.io/badge/Firebase-FFCA28?style=flat&logo=Firebase&logoColor=white"/>
 
+## ⚠️ 주의사항
+
+- 크롬 등에서 아무 이미지나 다운 받아서 사진 등록도 가능합니다!
+- 하단 BottomNavigationView 버튼들로 메인 상품리스트,마이페이지,메세지보관함,설정 등 으로 이동합니다.
+- 메인 상품리스트 화면에서 floatingactionbutton 안에 새로운상품등록 과 판매중,판매완료 필터링 적용가능합니다.
+- 메세지보관함 화면에서 받은메세지 항목클릭하면 해당 발신자에게 간단한 답장보내기 가능합니다
+- 긴 글 읽어주셔서 감사합니다!
+  
 ## 📌 주요 기능 및 구현 목표
 
  계정 생성 화면에서 email, 패스워드, 이름, 생년월일 입력하고 계정 생성 (10)
@@ -71,12 +78,3 @@
 각 항목에 대해 기능 동작 여부만 평가하며, 10점 또는 0점을 부여
 
 <br>
-
-## ⚠️ 주의사항
-
-- 크롬 등에서 아무 이미지나 다운 받아서 사진 등록도 가능합니다!
-- 하단 BottomNavigationView 버튼들로 메인 상품리스트,마이페이지,메세지보관함,설정 등 으로 이동합니다.
-- 메인 상품리스트 화면에서 floatingactionbutton 안에 새로운상품등록 과 판매중,판매완료 필터링 적용가능합니다.
-- 메세지보관함 화면에서 받은메세지 항목클릭하면 해당 발신자에게 간단한 답장보내기 가능합니다
-- 긴 글 읽어주셔서 감사합니다!
-  
